@@ -1,0 +1,6 @@
+@LagerWebb_HostAddress = http://localhost:5173
+
+GET {{LagerWebb_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
