@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route } from 'react-router-dom'
+import LoginPage from './pages/LoginPage'
+import HomePage from './pages/HomePage'
+import NotFound from './pages/NotFound';
+import ProtectedRoute from './routes/ProtectedRoute';
+import NavMenu from './components/NavMenu';
+import { useAuth } from './context/AuthContext';
 
-function App() {
-  const [count, setCount] = useState(0)
+ function App() {
+  const { isAuthenticated } = useAuth();
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    {isAuthenticated && <NavMenu />}
+
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+
+      <Route 
+        path="/home" 
+        element={
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route 
+        path="/notfound" 
+        element={
+          <ProtectedRoute>
+            <NotFound />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route path="*" element={<LoginPage />} />
+    </Routes>
     </>
-  )
+  );
 }
 
 export default App
