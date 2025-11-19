@@ -10,18 +10,26 @@ public class PartsService
     }
 
     public async Task<List<Product>> GetAllPartsAsync() =>
-        await _context.Products.ToListAsync();
+        await _context.Products
+            .AsNoTracking()
+            .Include(p => p.Category)
+            .ToListAsync();
 
     public async Task<List<Product>> SearchPartsAsync(string query) =>
         await _context.Products
+            .Include(p => p.Category)
             .Where(p => p.ProductName.Contains(query) || p.ArticleNumber.Contains(query))
             .ToListAsync();
 
     public async Task<Product> GetPartByIdAsync(int id)
     {
-        var part = await _context.Products.FindAsync(id);
+        var part = await _context.Products
+            .Include(p => p.Category)
+            .FirstOrDefaultAsync(p => p.ProductId == id);
+
         if (part == null)
             throw new KeyNotFoundException($"Part with id {id} not found.");
+
         return part;
     }
 
@@ -29,6 +37,9 @@ public class PartsService
     {
         _context.Products.Add(part);
         await _context.SaveChangesAsync();
+
+        await _context.Entry(part).Reference(p => p.Category).LoadAsync();
+
         return part;
     }
 
