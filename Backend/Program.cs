@@ -24,6 +24,8 @@ builder.Services.AddAuthentication()
 
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<PartsService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

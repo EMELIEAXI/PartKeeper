@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LagerWebb.Models.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 public class PartsService
 {
@@ -14,7 +15,7 @@ public class PartsService
 
     public async Task<List<Product>> SearchPartsAsync(string query) =>
         await _context.Products
-            .Where(p => p.ProductName.Contains(query) || p.ArticleNumber.Contains(query))
+            .Where(p => p.ProductName.ToLower().Contains(query.ToLower()) || p.ArticleNumber.Contains(query))
             .ToListAsync();
 
     public async Task<Product> GetPartByIdAsync(int id)
@@ -25,8 +26,15 @@ public class PartsService
         return part;
     }
 
-    public async Task<Product> CreatePartAsync(Product part)
+    public async Task<Product> CreatePartAsync(ProductCreateDto dto)
     {
+        var part = new Product
+        {
+            ProductName = dto.ProductName,
+            ArticleNumber = dto.ArticleNumber,
+            Quantity = dto.Quantity
+        };
+
         _context.Products.Add(part);
         await _context.SaveChangesAsync();
         return part;
@@ -50,6 +58,29 @@ public class PartsService
         if (part.Quantity <= 0) return false;
 
         part.Quantity--;
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<Product?> UpdatePartAsync(int id, ProductUpdateDto dto)
+    {
+        var part = await _context.Products.FindAsync(id);
+        if (part == null) return null;
+
+        part.ProductName = dto.ProductName;
+        part.ArticleNumber = dto.ArticleNumber;
+        part.Quantity = dto.Quantity;
+
+        await _context.SaveChangesAsync();
+        return part;
+    }
+
+    public async Task<bool> DeletePartAsync(int id)
+    {
+        var part = await _context.Products.FindAsync(id);
+        if (part == null) return false;
+
+        _context.Products.Remove(part);
         await _context.SaveChangesAsync();
         return true;
     }
