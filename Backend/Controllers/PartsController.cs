@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LagerWebb.Models.DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -15,21 +16,67 @@ public class PartsController : ControllerBase
     public async Task<IActionResult> GetParts()
     {
         var parts = await _service.GetAllPartsAsync();
-        return Ok(parts);
+       
+
+        var result = parts.Select(p => new ProductReadDto
+        {
+            Id = p.ProductId,
+            ProductName = p.ProductName,
+            ArticleNumber = p.ArticleNumber,
+            Quantity = p.Quantity
+        });
+
+        return Ok(result);
     }
 
     [HttpGet("search")]
     public async Task<IActionResult> Search(string query)
     {
         var parts = await _service.SearchPartsAsync(query);
+
+        var result = parts.Select(p => new ProductReadDto
+        {
+            Id = p.ProductId,
+            ProductName = p.ProductName,
+            ArticleNumber = p.ArticleNumber,
+            Quantity = p.Quantity
+        });
+
         return Ok(parts);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreatePart(Product part)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
     {
-        var created = await _service.CreatePartAsync(part);
-        return Ok(created);
+        var part = await _service.GetPartByIdAsync(id);
+
+        var dto = new ProductReadDto
+        {
+            Id = part.ProductId,
+            ProductName = part.ProductName,
+            ArticleNumber = part.ArticleNumber,
+            Quantity = part.Quantity
+        };
+
+        return Ok(dto);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreatePart(ProductCreateDto dto)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        var created = await _service.CreatePartAsync(dto);
+
+        var readDto = new ProductReadDto
+        {
+            Id = created.ProductId,
+            ProductName = created.ProductName,
+            ArticleNumber = created.ArticleNumber,
+            Quantity = created.Quantity
+        };
+
+        return CreatedAtAction(nameof(GetById), new { id = created.ProductId }, readDto);
     }
 
     [HttpPut("{id}/increase")]
@@ -41,6 +88,18 @@ public class PartsController : ControllerBase
         return Ok();
     }
 
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, ProductUpdateDto dto)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        var updated = await _service.UpdatePartAsync(id, dto);
+
+        if (updated == null) return NotFound();
+
+        return NoContent();
+    }
+
     [HttpPut("{id}/decrease")]
     public async Task<IActionResult> Decrease(int id)
     {
@@ -48,5 +107,18 @@ public class PartsController : ControllerBase
         if (!success) return BadRequest("Saldo kan inte bli negativt eller delen finns inte");
 
         return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var success = await _service.GetPartByIdAsync(id);
+        if (success == null) 
+            return NotFound();
+
+
+        await _service.DeletePartAsync(id);
+
+        return NoContent();
     }
 }
