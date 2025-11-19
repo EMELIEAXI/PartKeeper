@@ -15,12 +15,12 @@ export default function LoginPage() {
         <fieldset>
           <div className={styles ["form-colum"]}>
             <label htmlFor="name">Användarnamn </label>
-            <input type="email" placeholder="exempel@hotmail.com" required/>
+            <input id="name" type="email" placeholder="exempel@hotmail.com" required/>
           </div>
 
           <div className={styles ["form-colum"]}>
             <label htmlFor="password">Lösenord </label>
-            <input type="password" required/>
+            <input id="password" type="password" required/>
           </div>
 
           <a href="#">Har du glömt ditt användarnamn eller lösenord?</a>

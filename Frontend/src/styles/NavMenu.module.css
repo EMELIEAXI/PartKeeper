@@ -20,10 +20,6 @@
   padding: 1rem;
 }
 
-.logout-btn {
-  display: flex;
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 1000;
+.nav-wrapper a {
+  color: var(--link-color);
 }
