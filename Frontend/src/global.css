@@ -10,6 +10,9 @@
 /* Tema för grunddesign-val */
 :root {
   --primary-color: #1E88E5;
+  --golden-apricot: rgba(228, 154, 58, 1);
+  --lavender-grey: rgba(128, 138, 157, 1);
+
   --text-color: #fff;
   --font-family: Arial, Helvetica, sans-serif;
   --default-padding: 1rem;
