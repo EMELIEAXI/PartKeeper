@@ -11,6 +11,7 @@ import PartsPage from './pages/PartsPage';
 import HistoryPage from './pages/HistoryPage';
 import MyAccount from './pages/MyAccount';
 import AdminPage from './pages/AdminPage';
+import AdminRoute from './routes/AdminRoute';
 
  function App() {
   const { isAuthenticated } = useAuth();
@@ -54,9 +55,9 @@ import AdminPage from './pages/AdminPage';
       <Route 
         path="/admin" 
         element={
-          <ProtectedRoute>
+          <AdminRoute>
             <AdminPage />
-          </ProtectedRoute>
+          </AdminRoute>
         }
       />
 
