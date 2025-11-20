@@ -8,8 +8,6 @@ using RolesSeed;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddAuthentication();
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -17,19 +15,22 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
 builder.Services.AddAuthentication()
     .AddJwtBearer();
 
 builder.Services.AddControllers()
     .AddJsonOptions(x =>
-        x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
+        x.JsonSerializerOptions.ReferenceHandler = 
+            System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddScoped<PartsService>();
-
-builder.Services.AddScoped<PartsService>();
+builder.Services.AddScoped<TransactionService>();
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -39,7 +40,6 @@ using (var scope = app.Services.CreateScope())
     await SeedRoles.SeedAsync(roleManager);
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -48,10 +48,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseAuthentication();
-
 app.MapControllers();
-
 app.Run();
