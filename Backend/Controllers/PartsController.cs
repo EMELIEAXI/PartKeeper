@@ -1,8 +1,10 @@
 ﻿using LagerWebb.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class PartsController : ControllerBase
 {
     private readonly PartsService _service;
@@ -61,6 +63,7 @@ public class PartsController : ControllerBase
         return Ok(dto);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> CreatePart(ProductCreateDto dto)
     {
@@ -79,6 +82,7 @@ public class PartsController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.ProductId }, readDto);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}/increase")]
     public async Task<IActionResult> Increase(int id)
     {
@@ -88,6 +92,7 @@ public class PartsController : ControllerBase
         return Ok();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, ProductUpdateDto dto)
     {
@@ -109,6 +114,7 @@ public class PartsController : ControllerBase
         return Ok();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
