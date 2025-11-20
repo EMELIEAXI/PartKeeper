@@ -14,7 +14,7 @@ export default function NavMenu({ onOpenSidebar }: NavMenuProps) {
       <Link to="/home" className={styles["nav-link"]}><Home size={24}/>Home</Link>
       <Link to="/parts" className={styles["nav-link"]}><Wrench size={24}/>Reservdelar</Link>
       <Link to="/history" className={styles["nav-link"]}><History size={24}/>Historik</Link>
-      <button className={styles["nav-link"]} onClick={onOpenSidebar}><Menu size={28} /></button>
+      <button onClick={onOpenSidebar}><Menu size={28} /></button>
     </nav>
     </>
   );

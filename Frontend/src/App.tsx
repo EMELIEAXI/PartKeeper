@@ -9,6 +9,7 @@ import { useAuth } from './context/AuthContext';
 import { useState } from 'react';
 import PartsPage from './pages/PartsPage';
 import HistoryPage from './pages/HistoryPage';
+import MyAccount from './pages/MyAccount';
 
  function App() {
   const { isAuthenticated } = useAuth();
@@ -54,6 +55,15 @@ import HistoryPage from './pages/HistoryPage';
         element={
           <ProtectedRoute>
             <NotFound />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route 
+        path="/my-account" 
+        element={
+          <ProtectedRoute>
+            <MyAccount />
           </ProtectedRoute>
         }
       />
