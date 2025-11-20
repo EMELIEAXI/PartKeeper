@@ -12,7 +12,7 @@ namespace LagerWebb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20251117131124_second")]
-    partial class second
+    partial class Second
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

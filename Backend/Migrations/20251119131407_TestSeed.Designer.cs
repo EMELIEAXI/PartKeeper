@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LagerWebb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251119131407_TestSeed")]
+    partial class TestSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -304,32 +307,12 @@ namespace LagerWebb.Migrations
                     b.HasData(
                         new
                         {
-                            ProductId = 1,
-                            ArticleNumber = "19446",
+                            ProductId = 99,
+                            ArticleNumber = "TEST",
                             CategoryId = 1,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             MinimumStock = 0,
-                            ProductName = "Stållina",
-                            Quantity = 0
-                        },
-                        new
-                        {
-                            ProductId = 2,
-                            ArticleNumber = "45237",
-                            CategoryId = 2,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MinimumStock = 0,
-                            ProductName = "Linledare",
-                            Quantity = 0
-                        },
-                        new
-                        {
-                            ProductId = 3,
-                            ArticleNumber = "124639",
-                            CategoryId = 2,
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MinimumStock = 0,
-                            ProductName = "Knappar",
+                            ProductName = "TEST",
                             Quantity = 0
                         });
                 });
