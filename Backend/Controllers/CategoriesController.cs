@@ -37,10 +37,17 @@ public class CategoriesController : ControllerBase
     [HttpPost]
 	public async Task<IActionResult> CreateCategory([FromBody] Category category)
 	{
-		if (!ModelState.IsValid)
-			return BadRequest(ModelState);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new
+            {
+                errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+            });
+        }
 
-		_context.Categories.Add(category);
+        _context.Categories.Add(category);
 		await _context.SaveChangesAsync();
 
 		return CreatedAtAction(nameof(GetCategory), new { id = category.CategoryId }, category);

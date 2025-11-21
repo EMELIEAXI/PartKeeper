@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LagerWebb.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -18,14 +19,20 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         var user = await _userManager.FindByNameAsync(dto.Username);
-        if (user != null && await _userManager.CheckPasswordAsync(user, dto.Password))
-        {
-            var roles = await _userManager.GetRolesAsync(user);
-            var token = GenerateJwtToken(user.UserName!, roles);
-            return Ok(new { token });
-        }
-        return Unauthorized();
+
+        if (user == null)
+            return Unauthorized(new { message = "Fel användarnamn eller lösenord." });
+
+        if (!await _userManager.CheckPasswordAsync(user, dto.Password))
+            return Unauthorized(new { message = "Fel användarnamn eller lösenord." });
+
+        var roles = await _userManager.GetRolesAsync(user);
+        var token = GenerateJwtToken(user.UserName!, roles);
+        return Ok(new { token });
     }
 
     private string GenerateJwtToken(string username, IList<string> roles)
@@ -66,6 +73,9 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterDto dto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         var user = new ApplicationUser
         {
             UserName = dto.Email,
@@ -77,16 +87,17 @@ public class AuthController : ControllerBase
         var result = await _userManager.CreateAsync(user, dto.Password);
 
         if (!result.Succeeded)
-            return BadRequest(result.Errors);
+        {
+            // Förbättra Identity-felmeddelanden
+            return BadRequest(new
+            {
+                errors = result.Errors.Select(e => e.Description)
+            });
+        }
 
-        await _userManager.AddToRoleAsync(user, "Admin");
+            await _userManager.AddToRoleAsync(user, "Admin");
 
-        return Ok("User created");
+        return Ok(new { message = "Användare skapad." });
     }
 }
 
-public class LoginDto
-{
-    public required string Username { get; set; }
-    public required string Password { get; set; }
-}

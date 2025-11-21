@@ -25,7 +25,8 @@ public class PartsController : ControllerBase
             Id = p.ProductId,
             ProductName = p.ProductName,
             ArticleNumber = p.ArticleNumber,
-            Quantity = p.Quantity
+            Quantity = p.Quantity,
+            Description = p.Description
         });
 
         return Ok(result);
@@ -42,6 +43,7 @@ public class PartsController : ControllerBase
             ProductName = p.ProductName,
             ArticleNumber = p.ArticleNumber,
             Quantity = p.Quantity
+            Description = p.Description
         });
 
         return Ok(parts);
@@ -51,6 +53,9 @@ public class PartsController : ControllerBase
     public async Task<IActionResult> GetById(int id)
     {
         var part = await _service.GetPartByIdAsync(id);
+
+        if (part == null)
+            return NotFound(new { message = $"Produkten med id {id} hittades inte." });
 
         var dto = new ProductReadDto
         {
@@ -67,7 +72,14 @@ public class PartsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreatePart(ProductCreateDto dto)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)
+                .ToList();
+            return BadRequest(new { errors });
+        }
 
         var created = await _service.CreatePartAsync(dto);
 
@@ -76,7 +88,11 @@ public class PartsController : ControllerBase
             Id = created.ProductId,
             ProductName = created.ProductName,
             ArticleNumber = created.ArticleNumber,
-            Quantity = created.Quantity
+            Quantity = created.Quantity,
+            CategoryId = created.CategoryId,
+            Location = created.Location,
+            MinimumStock = created.MinimumStock,
+            Description = created.Description
         };
 
         return CreatedAtAction(nameof(GetById), new { id = created.ProductId }, readDto);
@@ -87,7 +103,9 @@ public class PartsController : ControllerBase
     public async Task<IActionResult> Increase(int id)
     {
         var success = await _service.IncreaseStockAsync(id);
-        if (!success) return NotFound();
+        if (!success)
+            return NotFound(new { message = $"Produkten med id {id} hittades inte eller kunde inte ökas." });
+
 
         return Ok();
     }
@@ -96,11 +114,18 @@ public class PartsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, ProductUpdateDto dto)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)
+                .ToList();
+            return BadRequest(new { errors });
+        }
 
         var updated = await _service.UpdatePartAsync(id, dto);
 
-        if (updated == null) return NotFound();
+        if (updated == null) return NotFound(new { message = $"Produkten med id {id} hittades inte." });
 
         return NoContent();
     }
@@ -109,7 +134,8 @@ public class PartsController : ControllerBase
     public async Task<IActionResult> Decrease(int id)
     {
         var success = await _service.DecreaseStockAsync(id);
-        if (!success) return BadRequest("Saldo kan inte bli negativt eller delen finns inte");
+        if (!success)
+            return BadRequest(new { message = "Saldo kan inte bli negativt eller produkten finns inte." });
 
         return Ok();
     }
@@ -119,8 +145,8 @@ public class PartsController : ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         var success = await _service.GetPartByIdAsync(id);
-        if (success == null) 
-            return NotFound();
+        if (success == null)
+            return NotFound(new { message = $"Produkten med id {id} hittades inte." });
 
 
         await _service.DeletePartAsync(id);
