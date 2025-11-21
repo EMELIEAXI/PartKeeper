@@ -1,6 +1,7 @@
 import styles from "../styles/Dashboard.module.css"
 import LowStockList from "./LowStockList";
 import RecentChanges from "./RecentChanges";
+import products from "../mock/products";
 
 // type DashboardProps = {
 //   //Skicka props som data från API eller context (senare)
@@ -13,7 +14,7 @@ export default function Dashboard() {
       <h1>Välkommen till PartKeeper anslagstavla</h1>
 
       <div className={styles.grid}>
-        <LowStockList/>
+        <LowStockList products={products}/>
 
         <RecentChanges />
       </div>

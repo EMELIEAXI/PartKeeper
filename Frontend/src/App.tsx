@@ -12,6 +12,8 @@ import HistoryPage from './pages/HistoryPage';
 import MyAccount from './pages/MyAccount';
 import AdminPage from './pages/AdminPage';
 import AdminRoute from './routes/AdminRoute';
+import ProductDetails from './components/parts-components/ProductDetails';
+import products from './mock/products';
 
  function App() {
   const { isAuthenticated } = useAuth();
@@ -39,6 +41,15 @@ import AdminRoute from './routes/AdminRoute';
         element={
           <ProtectedRoute>
             <PartsPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route 
+        path="/parts/:id" 
+        element={
+          <ProtectedRoute>
+            <ProductDetails products={products} />
           </ProtectedRoute>
         }
       />
