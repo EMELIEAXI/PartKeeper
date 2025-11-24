@@ -42,7 +42,7 @@ public class PartsController : ControllerBase
             Id = p.ProductId,
             ProductName = p.ProductName,
             ArticleNumber = p.ArticleNumber,
-            Quantity = p.Quantity
+            Quantity = p.Quantity,
             Description = p.Description
         });
 
