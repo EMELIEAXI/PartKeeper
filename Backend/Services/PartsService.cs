@@ -135,22 +135,46 @@ public class PartsService
     }
 
     public async Task<object> GetFilteredPagedPartsAsync(
-        string? search,
-        string? sort,
-        int page,
-        int pageSize)
+    string? search,
+    string? sort,
+    int? categoryId,
+    bool? inStock,
+    string? name,
+    string? articleNumber,
+    int page,
+    int pageSize)
     {
         var query = _context.Products.AsQueryable();
 
-        // SÖKNING
+        // 🔍 Dynamisk filtrering ---------------------------------------------
+
+        // Fritext-sökning
         if (!string.IsNullOrWhiteSpace(search))
-        {
             query = query.Where(p =>
                 p.ProductName.Contains(search) ||
                 p.ArticleNumber.Contains(search));
+
+        // Filtrera på kategori
+        if (categoryId.HasValue)
+            query = query.Where(p => p.CategoryId == categoryId);
+
+        // Lagerstatus (inStock = true → Quantity > 0)
+        if (inStock.HasValue)
+        {
+            query = inStock.Value
+                ? query.Where(p => p.Quantity > 0)
+                : query.Where(p => p.Quantity == 0);
         }
 
-        // SORTERING
+        // Filtrera på namn (delmatchning)
+        if (!string.IsNullOrWhiteSpace(name))
+            query = query.Where(p => p.ProductName.Contains(name));
+
+        // Filtrera på artikelnummer (delmatchning)
+        if (!string.IsNullOrWhiteSpace(articleNumber))
+            query = query.Where(p => p.ArticleNumber.Contains(articleNumber));
+
+        // 🔽 Sortering --------------------------------------------------------
         sort = sort?.ToLower();
         query = sort switch
         {
@@ -159,11 +183,11 @@ public class PartsService
             _ => query.OrderBy(p => p.ProductId)
         };
 
-        // TOTAL innan pagination
+        // 📊 Totalt antal
         var totalItems = await query.CountAsync();
         var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
-        // PAGINATION
+        // 📦 Pagination + dto
         var items = await query
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
@@ -177,7 +201,6 @@ public class PartsService
             })
             .ToListAsync();
 
-        // RETURNERA DATA + METADATA
         return new
         {
             currentPage = page,
