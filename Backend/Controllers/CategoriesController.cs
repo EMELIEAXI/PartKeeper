@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class CategoriesController : ControllerBase
 {
 	private readonly ApplicationDbContext _context;
@@ -31,19 +33,28 @@ public class CategoriesController : ControllerBase
 		return Ok(category);
 	}
 
-	[HttpPost]
+    [Authorize(Roles = "Admin")]
+    [HttpPost]
 	public async Task<IActionResult> CreateCategory([FromBody] Category category)
 	{
-		if (!ModelState.IsValid)
-			return BadRequest(ModelState);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new
+            {
+                errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+            });
+        }
 
-		_context.Categories.Add(category);
+        _context.Categories.Add(category);
 		await _context.SaveChangesAsync();
 
 		return CreatedAtAction(nameof(GetCategory), new { id = category.CategoryId }, category);
 	}
 
-	[HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
+    [HttpPut("{id}")]
 	public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
 	{
 		if (id != category.CategoryId)
@@ -62,7 +73,8 @@ public class CategoriesController : ControllerBase
 		return NoContent();
 	}
 
-	[HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id}")]
 	public async Task<IActionResult> DeleteCategory(int id)
 	{
 		var category = await _context.Categories.FindAsync(id);
