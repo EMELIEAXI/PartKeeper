@@ -16,8 +16,12 @@ public class PartsController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetParts(
-        string? search,
+         string? search,
         string? sort,
+        int? categoryId,
+        bool? inStock,
+        string? name,
+        string? articleNumber,
         int page = 1,
         int pageSize = 10)
     {
@@ -28,7 +32,7 @@ public class PartsController : ControllerBase
         // Om pagination/sök-sort är angivet → använd nya logiken
         if (!string.IsNullOrWhiteSpace(search) || !string.IsNullOrWhiteSpace(sort) || page > 1 || pageSize != 10)
         {
-            var pagedResult = await _service.GetFilteredPagedPartsAsync(search, sort, page, pageSize);
+            var pagedResult = await _service.GetFilteredPagedPartsAsync(search, sort, categoryId, inStock, name, articleNumber, page, pageSize);
             return Ok(pagedResult);
         }
 
