@@ -15,10 +15,25 @@ public class PartsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetParts()
+    public async Task<IActionResult> GetParts(
+        string? search,
+        string? sort,
+        int page = 1,
+        int pageSize = 10)
     {
+        // Om page eller pageSize är ogiltiga → returnera error
+        if (page < 1 || pageSize < 1)
+            return BadRequest(new { message = "page och pageSize måste vara större än 0." });
+
+        // Om pagination/sök-sort är angivet → använd nya logiken
+        if (!string.IsNullOrWhiteSpace(search) || !string.IsNullOrWhiteSpace(sort) || page > 1 || pageSize != 10)
+        {
+            var pagedResult = await _service.GetFilteredPagedPartsAsync(search, sort, page, pageSize);
+            return Ok(pagedResult);
+        }
+
+        // Fallback → returnera ALLT (som tidigare)
         var parts = await _service.GetAllPartsAsync();
-       
 
         var result = parts.Select(p => new ProductReadDto
         {
@@ -30,23 +45,6 @@ public class PartsController : ControllerBase
         });
 
         return Ok(result);
-    }
-
-    [HttpGet("search")]
-    public async Task<IActionResult> Search(string query)
-    {
-        var parts = await _service.SearchPartsAsync(query);
-
-        var result = parts.Select(p => new ProductReadDto
-        {
-            Id = p.ProductId,
-            ProductName = p.ProductName,
-            ArticleNumber = p.ArticleNumber,
-            Quantity = p.Quantity,
-            Description = p.Description
-        });
-
-        return Ok(parts);
     }
 
     [HttpGet("{id}")]
@@ -66,6 +64,28 @@ public class PartsController : ControllerBase
         };
 
         return Ok(dto);
+    }
+
+    [HttpGet("lowstock")]
+    public async Task<IActionResult> GetLowStock(
+    string? search = null,
+    string sort = "asc")
+    {
+        var parts = await _service.GetLowStockAsync(search, sort);
+
+        var result = parts.Select(p => new ProductReadDto
+        {
+            Id = p.ProductId,
+            ProductName = p.ProductName,
+            ArticleNumber = p.ArticleNumber,
+            Quantity = p.Quantity,
+            MinimumStock = p.MinimumStock,
+            CategoryId = p.CategoryId,
+            Location = p.Location,
+            Description = p.Description
+        });
+
+        return Ok(result);
     }
 
     [Authorize(Roles = "Admin")]

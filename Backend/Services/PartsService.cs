@@ -107,4 +107,84 @@ public class PartsService
 
         return true;
     }
+
+    public async Task<IEnumerable<Product>> GetLowStockAsync(string? search, string sort)
+    {
+        var query = _context.Products
+            .Where(p => p.Quantity < p.MinimumStock)
+            .AsQueryable();
+
+        // Sökning
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(p =>
+                p.ProductName.Contains(search) ||
+                p.ArticleNumber.Contains(search)
+            );
+        }
+
+        // Sortering
+        sort = sort?.ToLower() ?? "asc";
+        query = sort switch
+        {
+            "desc" => query.OrderByDescending(p => p.Quantity - p.MinimumStock),
+            _ => query.OrderBy(p => p.Quantity - p.MinimumStock)
+        };
+
+        return await query.ToListAsync();
+    }
+
+    public async Task<object> GetFilteredPagedPartsAsync(
+        string? search,
+        string? sort,
+        int page,
+        int pageSize)
+    {
+        var query = _context.Products.AsQueryable();
+
+        // SÖKNING
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(p =>
+                p.ProductName.Contains(search) ||
+                p.ArticleNumber.Contains(search));
+        }
+
+        // SORTERING
+        sort = sort?.ToLower();
+        query = sort switch
+        {
+            "desc" => query.OrderByDescending(p => p.ProductName),
+            "asc" => query.OrderBy(p => p.ProductName),
+            _ => query.OrderBy(p => p.ProductId)
+        };
+
+        // TOTAL innan pagination
+        var totalItems = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+        // PAGINATION
+        var items = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(p => new ProductReadDto
+            {
+                Id = p.ProductId,
+                ProductName = p.ProductName,
+                ArticleNumber = p.ArticleNumber,
+                Quantity = p.Quantity,
+                Description = p.Description
+            })
+            .ToListAsync();
+
+        // RETURNERA DATA + METADATA
+        return new
+        {
+            currentPage = page,
+            pageSize,
+            totalItems,
+            totalPages,
+            items
+        };
+    }
 }
