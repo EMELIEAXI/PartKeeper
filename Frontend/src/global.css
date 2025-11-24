@@ -26,6 +26,7 @@
 /* Global layout design */
 html, body {
   height: 100%;
+  margin-bottom: 4.5rem; /* Inget döljs av navmenyn */
   background-color: var(--lavender-grey);
   font-family: var(--font-family);
   color: var(--text-color);

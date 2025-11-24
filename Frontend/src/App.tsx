@@ -9,6 +9,11 @@ import { useAuth } from './context/AuthContext';
 import { useState } from 'react';
 import PartsPage from './pages/PartsPage';
 import HistoryPage from './pages/HistoryPage';
+import MyAccount from './pages/MyAccount';
+import AdminPage from './pages/AdminPage';
+import AdminRoute from './routes/AdminRoute';
+import ProductDetails from './components/parts-components/ProductDetails';
+import products from './mock/products';
 
  function App() {
   const { isAuthenticated } = useAuth();
@@ -41,6 +46,15 @@ import HistoryPage from './pages/HistoryPage';
       />
 
       <Route 
+        path="/parts/:id" 
+        element={
+          <ProtectedRoute>
+            <ProductDetails products={products} />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route 
         path="/history" 
         element={
           <ProtectedRoute>
@@ -50,10 +64,28 @@ import HistoryPage from './pages/HistoryPage';
       />
 
       <Route 
+        path="/admin" 
+        element={
+          <AdminRoute>
+            <AdminPage />
+          </AdminRoute>
+        }
+      />
+
+      <Route 
         path="/notfound" 
         element={
           <ProtectedRoute>
             <NotFound />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route 
+        path="/my-account" 
+        element={
+          <ProtectedRoute>
+            <MyAccount />
           </ProtectedRoute>
         }
       />

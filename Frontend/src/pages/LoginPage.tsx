@@ -1,11 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"
 import styles from "../styles/LoginPage.module.css"
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogin = () => {
     login();
+    navigate("/home");
   };
 
   return (
@@ -26,7 +29,14 @@ export default function LoginPage() {
           <a href="#">Har du glömt ditt användarnamn eller lösenord?</a>
 
           <div className={styles ["form-button"]}>
-            <button onClick={handleLogin}>Logga in</button>
+            <button onClick={handleLogin}>Logga in</button> 
+
+            {/* DEV-MODE ADMININLOGG true/false */}
+            <hr />
+            <p><strong>Dev-mode: login</strong></p>
+            <button type="button" onClick={() => { login(false); navigate("/home"); }}>Logga in som användare</button>
+            <button type="button" onClick={() => { login(true); navigate("/home"); }}>Logga in som admin</button>
+
           </div>
 
         </fieldset>

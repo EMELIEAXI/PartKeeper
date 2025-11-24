@@ -9,7 +9,7 @@ type SidebarProps = {
 }
 
 export default function Sidebar({ open, onClose }: SidebarProps) {
-  const { logout } = useAuth();
+  const { logout, isAdmin } = useAuth();
 
   return (
     <>
@@ -20,10 +20,14 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       <button className={styles["close-btn"]} onClick={onClose}><X size={20}/></button>
 
       <h3>Meny</h3>
+      {isAdmin && (<h5>Inloggad som administratör</h5>)}
       <Link to="/home" onClick={onClose}>Hem</Link>
       <Link to="/parts" onClick={onClose}>Reservdelar</Link>
       <Link to="/history" onClick={onClose}>Historik</Link>
-      <Link to="/account" onClick={onClose}>Mitt konto</Link>
+      {isAdmin && (
+        <Link to="/admin" onClick={onClose}>Hantera användare</Link>
+        )}
+      <Link to="/my-account" onClick={onClose}>Mitt konto</Link>
 
       <button onClick={logout} className={styles["logout-btn"]}>Logga ut</button>
     </aside>
