@@ -144,7 +144,9 @@ public class PartsService
     int page,
     int pageSize)
     {
-        var query = _context.Products.AsQueryable();
+        var query = _context.Products
+    .Include(p => p.Category)
+    .AsQueryable();
 
         // 🔍 Dynamisk filtrering ---------------------------------------------
 

@@ -59,6 +59,7 @@ public class TransactionService
     {
         return await _context.Transactions
             .Include(t => t.Product)
+                .ThenInclude(p => p.Category)
             .Include(t => t.User)
             .OrderByDescending(t => t.TimeStamp)
             .Select(t => new TransactionHistoryDto

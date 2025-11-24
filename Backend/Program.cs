@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using RolesSeed;
 using System.Text;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
@@ -75,6 +74,20 @@ builder.Services.AddScoped<PartsService>();
 builder.Services.AddScoped<TransactionService>();
 builder.Services.AddHttpContextAccessor();
 
+var AllowFrontend = "_allowFrontend";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: AllowFrontend,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5174")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -90,6 +103,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(AllowFrontend);
 
 app.UseAuthentication();
 app.UseAuthorization();
