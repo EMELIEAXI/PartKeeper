@@ -31,15 +31,16 @@ public class AuthController : ControllerBase
             return Unauthorized(new { message = "Fel användarnamn eller lösenord." });
 
         var roles = await _userManager.GetRolesAsync(user);
-        var token = GenerateJwtToken(user.UserName!, roles);
+        var token = GenerateJwtToken(user, roles);
         return Ok(new { token });
     }
 
-    private string GenerateJwtToken(string username, IList<string> roles)
+    private string GenerateJwtToken(ApplicationUser user, IList<string> roles)
     {
         var claims = new List<Claim>
     {
-        new Claim(ClaimTypes.Name, username)
+        new Claim(ClaimTypes.NameIdentifier, user.Id),
+        new Claim(ClaimTypes.Name, user.UserName!)
     };
 
         foreach (var role in roles)
@@ -58,6 +59,7 @@ public class AuthController : ControllerBase
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
 
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
