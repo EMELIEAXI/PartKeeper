@@ -1,0 +1,10 @@
+.componentsContainer {
+  position: relative;
+}
+
+.addBtn {
+  position: absolute;
+  border-radius: 8px;
+  top: 1rem;
+  right: 0;
+}

@@ -1,8 +1,8 @@
 export interface User {
   userId: number;
   admin: boolean;
-  f_namn: string;
-  l_namn: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
 }

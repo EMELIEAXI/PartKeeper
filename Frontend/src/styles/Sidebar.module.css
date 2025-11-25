@@ -15,7 +15,7 @@
   right: 0;
   height: 100vh;
   width: 260px;
-  background-color: orange;
+  background-color: var(--golden-apricot);
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.25);
 
   display: flex;

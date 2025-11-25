@@ -1,0 +1,26 @@
+.adminContainer {
+  padding: 1rem;
+  border: 2px solid var(--link-color);
+  background-color: var(--golden-apricot);
+}
+
+.adminContainer h1 {
+  margin: 1rem;
+}
+
+.backBtn {
+  margin: 1rem;
+  width: 70px;
+}
+
+.adminMenu li {
+  list-style: none;
+  padding: 1rem 2rem;
+  background-color: rgb(255, 252, 252);
+  margin: 0.5rem;
+}
+
+.adminMenu a {
+  color: var(--link-color);
+  text-decoration: none;
+}

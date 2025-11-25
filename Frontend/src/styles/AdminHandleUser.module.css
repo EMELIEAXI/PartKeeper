@@ -1,0 +1,7 @@
+.table {
+  padding: 1rem;
+}
+
+.tbody td {
+  border-bottom: 0.1rem solid rgba(255, 255, 255, 0.398);
+}
