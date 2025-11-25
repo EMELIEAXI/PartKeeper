@@ -24,10 +24,14 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
       <Link to="/home" onClick={onClose}>Hem</Link>
       <Link to="/parts" onClick={onClose}>Reservdelar</Link>
       <Link to="/history" onClick={onClose}>Historik</Link>
-      {isAdmin && (
-        <Link to="/admin" onClick={onClose}>Hantera användare</Link>
-        )}
       <Link to="/my-account" onClick={onClose}>Mitt konto</Link>
+      
+      {isAdmin && (
+        <Link to="/admin/handleAccounts" onClick={onClose}>Hantera användare</Link>
+        )}
+      {isAdmin && (
+        <Link to="/admin" className={styles["nav-link"]}>Admininställningar</Link>
+        )}
 
       <button onClick={logout} className={styles["logout-btn"]}>Logga ut</button>
     </aside>

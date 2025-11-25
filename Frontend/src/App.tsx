@@ -14,6 +14,11 @@ import AdminPage from './pages/AdminPage';
 import AdminRoute from './routes/AdminRoute';
 import ProductDetails from './components/parts-components/ProductDetails';
 import products from './mock/products';
+import AdminLayout from './components/admin-components/AdminLayout';
+import AdminCreateUser from './components/admin-components/AdminCreateUser';
+import AdminHandleUser from './components/admin-components/AdminHandleUser';
+import mockUsers from './mock/users';
+import AdminCreateProduct from './components/admin-components/AdminCreateProduct';
 
  function App() {
   const { isAuthenticated } = useAuth();
@@ -67,10 +72,20 @@ import products from './mock/products';
         path="/admin" 
         element={
           <AdminRoute>
-            <AdminPage />
+            <AdminLayout />
           </AdminRoute>
         }
-      />
+      >
+        {/* Adminsidor */}
+        <Route index element={<AdminPage />} />
+
+        <Route path="create-user" element={<AdminCreateUser />} />
+
+        <Route path="handle-user" element={<AdminHandleUser users={mockUsers}/>} />
+
+        <Route path="create-product" element={<AdminCreateProduct />} />
+        
+      </Route>
 
       <Route 
         path="/notfound" 
