@@ -1,17 +1,34 @@
 import { useParams } from "react-router-dom";
-import type { Product } from "../../interfaces"
-import styles from "../../styles/ProductDetails.module.css"
-import { Plus, Minus } from "lucide-react"
+import { useEffect, useState } from "react";
+import type { Product } from "../../interfaces";
+import styles from "../../styles/ProductDetails.module.css";
+import { Plus, Minus } from "lucide-react";
+import { getProductDetails  } from "../../services/Parts/parts.api";
 
-type Props = { products: Product[] };
-
-export default function ProductDetails({ products }: Props) {
+export default function ProductDetails() {
   const { id } = useParams();
   const productId = Number(id);
 
-  const product = products.find(p => p.productId === productId);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!product) return <p>Produkten hittades inte!</p>
+  useEffect(() => {
+    async function load() {
+      try {
+        console.log("Produkt-id från params:", productId);
+        const data = await getProductDetails(productId);
+        setProduct(data);
+      } catch {
+        setProduct(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, [productId]);
+
+  if (loading) return <p>Laddar...</p>;
+  if (!product) return <p>Produkten hittades inte!</p>;
 
   return (
     <div className={styles.productWrapper}>
@@ -20,12 +37,15 @@ export default function ProductDetails({ products }: Props) {
       <button className={styles.updateBtn}>redigera</button>
 
       <div className={styles.productImg}>
-      <img src="https://cdn.pixabay.com/photo/2023/11/15/15/54/ai-generated-8390398_1280.jpg" alt="Bromsbelägg" />
+        <img
+          src="https://cdn.pixabay.com/photo/2023/11/15/15/54/ai-generated-8390398_1280.jpg"
+          alt="Produktbild"
+        />
       </div>
 
       <div className={styles.plusMinusBtn}>
-        <button><Minus/></button>
-        <button><Plus/></button>
+        <button><Minus /></button>
+        <button><Plus /></button>
       </div>
 
       <table className={styles.productInfoTable}>
@@ -44,7 +64,7 @@ export default function ProductDetails({ products }: Props) {
             <th>Lagerantal: </th>
             <td>{product.quantity}</td>
           </tr>
-          
+
           <tr>
             <th>Hyllplats:</th>
             <td>{product.location}</td>
@@ -62,6 +82,76 @@ export default function ProductDetails({ products }: Props) {
         </tbody>
       </table>
     </div>
-
-  )
+  );
 }
+
+
+
+
+// import { useParams } from "react-router-dom";
+// import type { Product } from "../../interfaces"
+// import styles from "../../styles/ProductDetails.module.css"
+// import { Plus, Minus } from "lucide-react"
+
+// type Props = { products: Product[] };
+
+// export default function ProductDetails({ products }: Props) {
+//   const { id } = useParams();
+//   const productId = Number(id);
+
+//   const product = products.find(p => p.productId === productId);
+
+//   if (!product) return <p>Produkten hittades inte!</p>
+
+//   return (
+//     <div className={styles.productWrapper}>
+//       <h1>{product.productName}</h1>
+
+//       <button className={styles.updateBtn}>redigera</button>
+
+//       <div className={styles.productImg}>
+//       <img src="https://cdn.pixabay.com/photo/2023/11/15/15/54/ai-generated-8390398_1280.jpg" alt="Bromsbelägg" />
+//       </div>
+
+//       <div className={styles.plusMinusBtn}>
+//         <button><Minus/></button>
+//         <button><Plus/></button>
+//       </div>
+
+//       <table className={styles.productInfoTable}>
+//         <tbody>
+//           <tr>
+//             <th>Artikelnummer: </th>
+//             <td>{product.articleNumber}</td>
+//           </tr>
+
+//           <tr>
+//             <th>Beskrivning: </th>
+//             <td>{product.description}</td>
+//           </tr>
+
+//           <tr>
+//             <th>Lagerantal: </th>
+//             <td>{product.quantity}</td>
+//           </tr>
+          
+//           <tr>
+//             <th>Hyllplats:</th>
+//             <td>{product.location}</td>
+//           </tr>
+
+//           <tr>
+//             <th>Kategori: </th>
+//             <td>{product.categoryId}</td>
+//           </tr>
+
+//           <tr>
+//             <th>Minimilager: </th>
+//             <td>{product.minimumStock}</td>
+//           </tr>
+//         </tbody>
+//       </table>
+//     </div>
+
+//   )
+// }

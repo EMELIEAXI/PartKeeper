@@ -49,7 +49,7 @@ import products from './mock/products';
         path="/parts/:id" 
         element={
           <ProtectedRoute>
-            <ProductDetails products={products} />
+            <ProductDetails/>
           </ProtectedRoute>
         }
       />
