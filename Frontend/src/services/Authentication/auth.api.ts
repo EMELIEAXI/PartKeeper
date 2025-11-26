@@ -1,0 +1,61 @@
+export type User = {
+  id: string;
+  email: string;
+  roles: string[];
+};
+
+type LoginResponse = {
+  token: string;
+  user: User;
+};
+
+// Logga in med email och lösenord
+export async function login(email: string, password: string): Promise<LoginResponse> {
+  const res = await fetch("https://localhost:7089/api/Auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("Login error:", text);
+    throw new Error("Felaktiga inloggningsuppgifter");
+  }
+
+  const data: LoginResponse = await res.json();
+
+  // Spara token och user i localStorage
+  localStorage.setItem("token", data.token);
+  localStorage.setItem("user", JSON.stringify(data.user));
+
+  return data;
+}
+
+// Logga ut
+export function logout() {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+}
+
+// Hämta token
+export function getToken(): string | null {
+  return localStorage.getItem("token");
+}
+
+// Hämta nuvarande användare från localStorage
+export function getCurrentUser(): User | null {
+  const user = localStorage.getItem("user");
+  return user ? JSON.parse(user) : null;
+}
+
+// Dev-mode login (enbart frontend)
+export function loginDev(role: "admin" | "user") {
+  const devUser: User = {
+    id: "dev-user-id",
+    email: "dev@example.com",
+    roles: [role === "admin" ? "Admin" : "User"],
+  };
+  localStorage.setItem("token", "dev-token");
+  localStorage.setItem("user", JSON.stringify(devUser));
+}

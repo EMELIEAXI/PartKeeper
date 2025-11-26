@@ -31,8 +31,8 @@ export default function ProductSearch({ products }: Props) {
 
       <ul className={styles.conentList}>
         {filtered.map(p => (
-          <li key={p.productId}>
-            <Link to={`/parts/${p.productId}`}>
+          <li key={p.id}>
+            <Link to={`/parts/${p.id}`}>
             {p.productName} ({p.quantity})
             </Link>
           </li>

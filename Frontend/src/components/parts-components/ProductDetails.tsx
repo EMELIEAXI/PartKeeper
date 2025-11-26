@@ -1,33 +1,44 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Product } from "../../interfaces";
 import styles from "../../styles/ProductDetails.module.css";
+import { Plus, Minus } from "lucide-react";
+import { getProductDetails  } from "../../services/Parts/parts.api";
 import { createTransaction } from "../../services/TransactionsApi";
 import type { CreateTransactionPayload } from "../../services/TransactionsApi";
 
-type Props = { products: Product[] };
-
-export default function ProductDetails({ products }: Props) {
+export default function ProductDetails() {
   const { id } = useParams();
   const productId = Number(id);
 
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [localQuantity, setLocalQuantity] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [comment, setComment] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [localQuantity, setLocalQuantity] = useState<number | null>(null);
 
-  const product = products.find(p => p.productId === productId);
-  
+  useEffect(() => {
+    if (productId === null || isNaN(productId)) return;
+    
+    async function load() {
+      try {
+        const data = await getProductDetails(productId);
+        setProduct(data);
+        setLocalQuantity(data.quantity);
+      } catch {
+        setProduct(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, [productId]);
 
-  if (product && localQuantity === null) {
-    setLocalQuantity(product.quantity);
-  }
-
-  if (!product) {
-    return <p>Produkten hittades inte!</p>;
-  }
+  if (loading) return <p>Laddar...</p>;
+  if (!product) return <p>Produkten hittades inte!</p>;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -35,7 +46,7 @@ export default function ProductDetails({ products }: Props) {
     setSuccess("");
 
     const payload: CreateTransactionPayload = {
-      productId: product!.productId,
+      productId: product!.id,
       quantityChange: -Math.abs(quantity),
       transactionType: "Remove",
       comment,
@@ -58,6 +69,7 @@ export default function ProductDetails({ products }: Props) {
   }
 
   return (
+  <div>
     <div className={styles.productWrapper}>
       <h1>{product.productName}</h1>
 
@@ -66,8 +78,15 @@ export default function ProductDetails({ products }: Props) {
       <div className={styles.productImg}>
         <img
           src="https://cdn.pixabay.com/photo/2023/11/15/15/54/ai-generated-8390398_1280.jpg"
-          alt="Bromsbelägg"
+          alt="Produktbild"
         />
+      </div>
+
+      <div className={styles.plusMinusBtn}>
+        <button><Minus /></button>
+        <button><Plus /></button>
+      </div>
+          alt="Bromsbelägg"
       </div>
 
       <button
