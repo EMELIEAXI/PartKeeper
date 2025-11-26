@@ -4,9 +4,6 @@ import type { Product } from "../../interfaces";
 import styles from "../../styles/ProductDetails.module.css";
 import { Plus, Minus } from "lucide-react";
 import { getProductDetails  } from "../../services/Parts/parts.api";
-import { useState } from "react";
-import type { Product } from "../../interfaces";
-import styles from "../../styles/ProductDetails.module.css";
 import { createTransaction } from "../../services/TransactionsApi";
 import type { CreateTransactionPayload } from "../../services/TransactionsApi";
 
@@ -49,7 +46,7 @@ export default function ProductDetails() {
     setSuccess("");
 
     const payload: CreateTransactionPayload = {
-      productId: product!.productId,
+      productId: product!.id,
       quantityChange: -Math.abs(quantity),
       transactionType: "Remove",
       comment,
@@ -72,6 +69,7 @@ export default function ProductDetails() {
   }
 
   return (
+  <div>
     <div className={styles.productWrapper}>
       <h1>{product.productName}</h1>
 
@@ -89,7 +87,6 @@ export default function ProductDetails() {
         <button><Plus /></button>
       </div>
           alt="Bromsbelägg"
-        />
       </div>
 
       <button

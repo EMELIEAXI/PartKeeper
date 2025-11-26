@@ -11,6 +11,7 @@ type AuthContextType = {
   isAuthenticated: boolean;
   isAdmin: boolean;
   login: (email: string, password: string) => Promise<void>;
+    logout: () => void;
   //
 //type UserRole = "admin" | "user";
 
@@ -44,8 +45,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
    console.log("Resultat från API:", JSON.stringify(data, null, 2));
 
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+    // localStorage.setItem("token", data.token);
+    // localStorage.setItem("user", JSON.stringify(data.user));
 
     setUser(data.user);
   };
