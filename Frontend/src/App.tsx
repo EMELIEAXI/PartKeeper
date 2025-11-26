@@ -54,7 +54,7 @@ import AdminCreateProduct from './components/admin-components/AdminCreateProduct
         path="/parts/:id" 
         element={
           <ProtectedRoute>
-            <ProductDetails products={products} />
+            <ProductDetails/>
           </ProtectedRoute>
         }
       />
