@@ -11,7 +11,17 @@ type AuthContextType = {
   isAuthenticated: boolean;
   isAdmin: boolean;
   login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  //
+//type UserRole = "admin" | "user";
+
+//type AuthContextType = {
+  //token: string | null;
+  //user: { email: string; role: UserRole } | null;
+  //isAuthenticated: boolean;
+  //isAdmin: boolean;
+  //login: (email: string, password: string) => Promise<boolean>;
+  //loginDev: (role: UserRole) => void;
+  //logout: () => void;
 };
 // type AuthContextType = {
 //   isAuthenticated: boolean;
@@ -20,7 +30,7 @@ type AuthContextType = {
 //   logout: () => void;
 // };
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(

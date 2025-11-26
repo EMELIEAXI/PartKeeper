@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"
 import styles from "../styles/LoginPage.module.css"
+import { useState } from "react";
 
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, loginDev } = useAuth();
   const navigate = useNavigate();
 
   
@@ -29,10 +30,12 @@ export default function LoginPage() {
   }
 };
 
+
   return (
     <div>
       <form onSubmit={handleLogin} className={styles ["form-wrapper"]}>
         <h2>Logga in</h2>
+
         <fieldset>
           <div className={styles ["form-colum"]}>
             <label htmlFor="name">Användarnamn </label>
@@ -53,17 +56,34 @@ export default function LoginPage() {
               required/>
           </div>
 
+          {error && <p className={styles.errorMessage}>{error}</p>}
+
           <a href="#">Har du glömt ditt användarnamn eller lösenord?</a>
 
           <div className={styles ["form-button"]}>
             <button type="submit">Logga in</button> 
 
-            {/* DEV-MODE ADMININLOGG true/false */}
-            {/* <hr />
+            {/* DEV-MODE INLOGG */}
+            <hr />
             <p><strong>Dev-mode: login</strong></p>
-            <button type="button" onClick={() => { login(false); navigate("/home"); }}>Logga in som användare</button>
-            <button type="button" onClick={() => { login(true); navigate("/home"); }}>Logga in som admin</button> */}
+            
+            <button
+            type="button"
+            onClick={() => {
+              loginDev("user");
+              navigate("/home");
+            }}>
+              Logga in som användare *Dev-mode*
+              </button>
 
+            <button
+            type="button"
+            onClick={() => {
+              loginDev("admin");
+              navigate("/home")
+            }}>
+              Logga in som admin *Dev-mode*
+            </button>
           </div>
 
         </fieldset>
