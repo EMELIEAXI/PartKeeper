@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel.DataAnnotations;
 
+[Authorize(Roles ="Admin")]
 public class RegisterDto
 {
     [Required(ErrorMessage = "Email är obligatoriskt.")]
@@ -15,4 +17,11 @@ public class RegisterDto
 
     [Required(ErrorMessage = "Efternamn krävs.")]   
     public required string LastName { get; set; }
+
+    [Required(ErrorMessage = "Du måste ange telefonnummer")]
+    public required string PhoneNumber { get; set; }
+
+
+    [Required(ErrorMessage = "Du måste välja en roll")]
+    public required List<string> Roles { get; set; }
 }

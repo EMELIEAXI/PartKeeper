@@ -26,22 +26,32 @@ public class TransactionsController : ControllerBase
 
             return BadRequest(new { errors });
         }
+
         try
         {
             var transaction = await _service.CreateTransactionAsync(dto);
-            return Ok(transaction);
+
+            var response = new TransactionReadDto
+            {
+                TransactionId = transaction.TransactionId,
+                ProductId = transaction.ProductId,
+                ProductName = transaction.Product!.ProductName,
+                QuantityChange = transaction.QuantityChange,
+                NewQuantity = transaction.NewQuantity,
+                TransactionType = transaction.TransactionType,
+                Comment = transaction.Comment,
+                User = transaction.User != null
+                    ? transaction.User.FirstName + " " + transaction.User.LastName
+                    : "Okänd användare",
+                TimeStamp = transaction.TimeStamp
+            };
+
+
+            return Ok(response);
         }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
-        catch (InvalidOperationException ex)
+        catch (Exception ex)
         {
             return BadRequest(new { message = ex.Message });
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Unauthorized(new { message = ex.Message });
         }
     }
 

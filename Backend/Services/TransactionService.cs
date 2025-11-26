@@ -16,41 +16,64 @@ public class TransactionService
     {
         var product = await _context.Products.FindAsync(dto.ProductId);
         if (product == null)
-            throw new KeyNotFoundException("Produkt hittades inte.");
-
-        var newQuantity = product.Quantity + dto.QuantityChange;
-        if (newQuantity < 0)
-            throw new InvalidOperationException("Lagret kan inte bli negativt.");
+            throw new Exception("Produkten hittades inte.");
 
         var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
         if (userId == null)
-            throw new UnauthorizedAccessException("Ingen inloggad användare kunde identifieras.");
+            throw new Exception("Ingen inloggad användare kunde identifieras.");
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user == null)
+            throw new Exception("Användaren hittades inte.");
+
+        if (user == null)
+            throw new Exception("Användaren hittades inte.");
+
+        var newQuantity = product.Quantity + dto.QuantityChange;
+        product.Quantity = newQuantity;
 
         var transaction = new Transaction
         {
-            ProductId = dto.ProductId,
+            ProductId = product.ProductId,
+            UserId = user.Id,
             QuantityChange = dto.QuantityChange,
             NewQuantity = newQuantity,
-            TransactionType = dto.TransactionType,
+            TransactionType = dto.QuantityChange > 0 ? "Add" : "Remove",
             Comment = dto.Comment,
-            UserId = userId,
             TimeStamp = DateTime.UtcNow
         };
-
-        product.Quantity = newQuantity;
 
         _context.Transactions.Add(transaction);
         await _context.SaveChangesAsync();
 
-        return transaction;
+        // 🔥 Ladda om med Include(User) + Include(Product)
+        return await _context.Transactions
+            .Include(t => t.User)
+            .Include(t => t.Product)
+            .FirstAsync(t => t.TransactionId == transaction.TransactionId);
     }
 
-    public async Task<List<Transaction>> GetTransactionsAsync()
+    public async Task<List<TransactionHistoryDto>> GetTransactionsAsync()
     {
         return await _context.Transactions
             .Include(t => t.Product)
+                .ThenInclude(p => p.Category)
             .Include(t => t.User)
             .OrderByDescending(t => t.TimeStamp)
+            .Select(t => new TransactionHistoryDto
+            {
+                TransactionId = t.TransactionId,
+                ProductId = t.ProductId,
+                ProductName = t.Product.ProductName,
+                QuantityChange = t.QuantityChange,
+                NewQuantity = t.NewQuantity,
+                TransactionType = t.TransactionType,
+                Comment = t.Comment,
+                User = t.User.FirstName + " " + t.User.LastName,
+                TimeStamp = t.TimeStamp
+            })
             .ToListAsync();
     }
 }

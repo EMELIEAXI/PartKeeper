@@ -1,9 +1,7 @@
 ﻿using LagerWebb.Models.DTOs;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,62 +10,80 @@ using System.Text;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
+    private readonly IConfiguration _config;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
 
-    private readonly string _key = "MySuperUltraSecretJwtKey_2025_ABC123!!";
+    public AuthController(
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager,
+        IConfiguration config)
+    {
+        _userManager = userManager;
+        _signInManager = signInManager;
+        _config = config;
+    }
 
-    // Change the return type from 'async IActionResult' to 'async Task<IActionResult>'
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var user = await _userManager.FindByNameAsync(dto.Username);
+        // Bättre än FindByNameAsync
+        var user = await _userManager.FindByEmailAsync(dto.Email);
 
         if (user == null)
-            return Unauthorized(new { message = "Fel användarnamn eller lösenord." });
+            return Unauthorized(new { message = "Fel e-post eller lösenord." });
 
         if (!await _userManager.CheckPasswordAsync(user, dto.Password))
-            return Unauthorized(new { message = "Fel användarnamn eller lösenord." });
+            return Unauthorized(new { message = "Fel e-post eller lösenord." });
 
         var roles = await _userManager.GetRolesAsync(user);
-        var token = GenerateJwtToken(user.UserName!, roles);
-        return Ok(new { token });
+
+        var token = GenerateJwtToken(user, roles);
+
+        return Ok(new
+        {
+            token,
+            user = new
+            {
+                id = user.Id,
+                email = user.Email,
+                roles = roles
+            }
+        });
     }
 
-    private string GenerateJwtToken(string username, IList<string> roles)
+    private string GenerateJwtToken(ApplicationUser user, IList<string> roles)
     {
         var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, username)
-    };
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(ClaimTypes.Name, user.UserName)
+        };
 
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key));
+        var key = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(_config["Jwt:Key"])
+        );
+
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(
+            issuer: _config["Jwt:Issuer"],
+            audience: _config["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.Now.AddHours(1),
+            expires: DateTime.UtcNow.AddHours(1),
             signingCredentials: creds
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
-
-    public AuthController(
-        UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager)
-    {
-        _userManager = userManager;
-        _signInManager = signInManager;
     }
 
     [HttpPost("register")]
@@ -87,17 +103,11 @@ public class AuthController : ControllerBase
         var result = await _userManager.CreateAsync(user, dto.Password);
 
         if (!result.Succeeded)
-        {
-            // Förbättra Identity-felmeddelanden
-            return BadRequest(new
-            {
-                errors = result.Errors.Select(e => e.Description)
-            });
-        }
+            return BadRequest(new { errors = result.Errors.Select(e => e.Description) });
 
-            await _userManager.AddToRoleAsync(user, "Admin");
+        // Standardroll kan du ändra här
+        await _userManager.AddToRoleAsync(user, "Admin");
 
         return Ok(new { message = "Användare skapad." });
     }
 }
-

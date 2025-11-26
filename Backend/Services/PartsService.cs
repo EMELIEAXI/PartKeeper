@@ -107,4 +107,109 @@ public class PartsService
 
         return true;
     }
+
+    public async Task<IEnumerable<Product>> GetLowStockAsync(string? search, string sort)
+    {
+        var query = _context.Products
+            .Where(p => p.Quantity < p.MinimumStock)
+            .AsQueryable();
+
+        // Sökning
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(p =>
+                p.ProductName.Contains(search) ||
+                p.ArticleNumber.Contains(search)
+            );
+        }
+
+        // Sortering
+        sort = sort?.ToLower() ?? "asc";
+        query = sort switch
+        {
+            "desc" => query.OrderByDescending(p => p.Quantity - p.MinimumStock),
+            _ => query.OrderBy(p => p.Quantity - p.MinimumStock)
+        };
+
+        return await query.ToListAsync();
+    }
+
+    public async Task<object> GetFilteredPagedPartsAsync(
+    string? search,
+    string? sort,
+    int? categoryId,
+    bool? inStock,
+    string? name,
+    string? articleNumber,
+    int page,
+    int pageSize)
+    {
+        var query = _context.Products
+    .Include(p => p.Category)
+    .AsQueryable();
+
+        // 🔍 Dynamisk filtrering ---------------------------------------------
+
+        // Fritext-sökning
+        if (!string.IsNullOrWhiteSpace(search))
+            query = query.Where(p =>
+                p.ProductName.Contains(search) ||
+                p.ArticleNumber.Contains(search));
+
+        // Filtrera på kategori
+        if (categoryId.HasValue)
+            query = query.Where(p => p.CategoryId == categoryId);
+
+        // Lagerstatus (inStock = true → Quantity > 0)
+        if (inStock.HasValue)
+        {
+            query = inStock.Value
+                ? query.Where(p => p.Quantity > 0)
+                : query.Where(p => p.Quantity == 0);
+        }
+
+        // Filtrera på namn (delmatchning)
+        if (!string.IsNullOrWhiteSpace(name))
+            query = query.Where(p => p.ProductName.Contains(name));
+
+        // Filtrera på artikelnummer (delmatchning)
+        if (!string.IsNullOrWhiteSpace(articleNumber))
+            query = query.Where(p => p.ArticleNumber.Contains(articleNumber));
+
+        // 🔽 Sortering --------------------------------------------------------
+        sort = sort?.ToLower();
+        query = sort switch
+        {
+            "desc" => query.OrderByDescending(p => p.ProductName),
+            "asc" => query.OrderBy(p => p.ProductName),
+            _ => query.OrderBy(p => p.ProductId)
+        };
+
+        // 📊 Totalt antal
+        var totalItems = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+        // 📦 Pagination + dto
+        var items = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(p => new ProductReadDto
+            {
+                Id = p.ProductId,
+                ProductName = p.ProductName,
+                ArticleNumber = p.ArticleNumber,
+                Quantity = p.Quantity,
+                Description = p.Description
+            })
+            .ToListAsync();
+
+        return new
+        {
+            currentPage = page,
+            pageSize,
+            totalItems,
+            totalPages,
+            items
+        };
+    }
 }

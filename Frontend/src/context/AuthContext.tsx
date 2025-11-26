@@ -1,70 +1,64 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
+import { login as logInRequest, logout as logoutRequest } from "../services/Authentication/auth.api"
 
-type UserRole = "admin" | "user";
-
+type User = {
+  id: string;
+  email: string;
+  roles: string[];
+};
 type AuthContextType = {
-  token: string | null;
-  user: { email: string; role: UserRole } | null;
+  user: User | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
-  login: (email: string, password: string) => Promise<boolean>;
-  loginDev: (role: UserRole) => void;
-  logout: () => void;
+  login: (email: string, password: string) => Promise<void>;
+    logout: () => void;
+  //
+//type UserRole = "admin" | "user";
+
+//type AuthContextType = {
+  //token: string | null;
+  //user: { email: string; role: UserRole } | null;
+  //isAuthenticated: boolean;
+  //isAdmin: boolean;
+  //login: (email: string, password: string) => Promise<boolean>;
+  //loginDev: (role: UserRole) => void;
+  //logout: () => void;
 };
+// type AuthContextType = {
+//   isAuthenticated: boolean;
+//   isAdmin: boolean;
+//   login: (admin?: boolean) => void;
+//   logout: () => void;
+// };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
-  const [user, setUser] = useState<{ email: string; role: UserRole } | null>(null);
+  const [user, setUser] = useState<User | null>(
+    JSON.parse(localStorage.getItem("user") || "null"));
 
-  const login = async (email: string, password: string): Promise<boolean> => {
-    try {
-      const res = await fetch("/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
 
-      if (!res.ok) return false;
+  const login = async (email: string, password: string) => {
+    console.log("Försöker logga in med:", email, password);
 
-      const data = await res.json();
-      localStorage.setItem("token", data.token);
+    const data = await logInRequest(email, password);
 
-      setToken(data.token);
-      setUser({ email, role: data.role || "user" });
+   console.log("Resultat från API:", JSON.stringify(data, null, 2));
 
-      return true;
-    } catch {
-      return false;
-    }
+    // localStorage.setItem("token", data.token);
+    // localStorage.setItem("user", JSON.stringify(data.user));
+
+    setUser(data.user);
   };
 
-  // Devmode - login * tillfällig *
-  const loginDev = (role: UserRole) => {
-    const fakeToken = "dev-token";
-
-    localStorage.setItem("token", fakeToken);
-    setToken(fakeToken);
-
-    setUser({
-      email: role === "admin" ? "admin@test.com" : "user@test.com",
-      role
-    });
-  };
-
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
+     const logout = () => {
+    logoutRequest();
     setUser(null);
   };
-
-  const isAuthenticated = !!token;
-  const isAdmin = user?.role === "admin";
-
+  const isAuthenticated = !!user;
+  const isAdmin = user?.roles.includes("Admin") ?? false;
   return (
-    <AuthContext.Provider value={{ token, user, isAuthenticated, isAdmin, login, loginDev, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, isAdmin, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
@@ -72,7 +66,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
-  return ctx;
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used inside an AuthProvider");
+  }
+  return context;
 }
