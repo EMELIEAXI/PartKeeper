@@ -2,11 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"
 import styles from "../styles/LoginPage.module.css"
-import { useState } from "react";
 
 
 export default function LoginPage() {
-  const { login, loginDev } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   
@@ -22,12 +21,14 @@ export default function LoginPage() {
   e.preventDefault();
     setError("");
 
-  try {
-    await login(email, password);
-    navigate("/home");
-  } catch {
-    setError("Felaktiga uppgifter");
-  }
+try {
+  const data = await login(email, password);
+  console.log("Login success:", data);
+  navigate("/home");
+} catch (err: any) {
+  console.error("Login failed:", err);
+  setError(err.message || "Felaktiga uppgifter");
+}
 };
 
 
@@ -63,7 +64,7 @@ export default function LoginPage() {
           <div className={styles ["form-button"]}>
             <button type="submit">Logga in</button> 
 
-            {/* DEV-MODE INLOGG */}
+            {/* //* DEV-MODE INLOGG
             <hr />
             <p><strong>Dev-mode: login</strong></p>
             
@@ -82,9 +83,9 @@ export default function LoginPage() {
               loginDev("admin");
               navigate("/home")
             }}>
-              Logga in som admin *Dev-mode*
-            </button>
-          </div>
+              Logga in som admin *Dev-mode* }
+            </button>*/ }
+        </div>
 
         </fieldset>
       </form>
