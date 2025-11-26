@@ -14,7 +14,7 @@ export default function LowStockList({ products = [] }: Props) {
     <section className={styles["dashboard-section"]}>
       <h3>Varning</h3>
         <h4>Produkter med kritiskt lågt lagersaldo</h4>
-          <ul className={styles["list"]}>
+          <ul className={styles.list}>
             {LowStock.map(p => (
               <li key={p.productId}>
                 <Link to={`/parts/${p.productId}`}>

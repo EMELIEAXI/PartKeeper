@@ -1,7 +1,8 @@
 .adminContainer {
   padding: 1rem;
-  border: 2px solid var(--link-color);
   background-color: var(--golden-apricot);
+  width: 100%;
+  max-width: 400px;
 }
 
 .adminContainer h1 {
