@@ -6,13 +6,16 @@
   padding: 2rem;
   margin-bottom: 2rem;
   border-radius: 1rem;
-  background-color: var(--orange);
+  background-color: var(--golden-apricot);
   color: var(--text-color);
 }
 
 .dashboard-section h3 {
   color: red;
-  text-align: center;
+}
+
+.list li {
+  list-style: none;
 }
 
 .dashboard-section a {
@@ -30,6 +33,10 @@
 
 .dashboard-section a:nth-of-type(even) {
   background-color: rgb(208, 212, 215);
+}
+
+.dashboard-section a:hover {
+  background-color: rgb(178, 179, 184);
 }
 
 .warnQty {

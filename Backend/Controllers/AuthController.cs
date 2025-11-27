@@ -98,7 +98,8 @@ public class AuthController : ControllerBase
             UserName = dto.Email,
             Email = dto.Email,
             FirstName = dto.FirstName,
-            LastName = dto.LastName
+            LastName = dto.LastName,
+            PhoneNumber = dto.PhoneNumber
         };
 
         var result = await _userManager.CreateAsync(user, dto.Password);
@@ -107,7 +108,7 @@ public class AuthController : ControllerBase
             return BadRequest(new { errors = result.Errors.Select(e => e.Description) });
 
         // Standardroll kan du ändra här
-        await _userManager.AddToRoleAsync(user, "Admin");
+        await _userManager.AddToRoleAsync(user, dto.Role);
 
         return Ok(new { message = "Användare skapad." });
     }

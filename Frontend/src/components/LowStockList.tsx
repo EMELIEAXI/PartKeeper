@@ -17,6 +17,7 @@ const [products, setProducts] = useState<Product[]>([]);
       try {
         const data = await getLowstock();
         setProducts(data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err : any) {
         console.error("Kunde inte hämta produkter med låg lager", err);
         setError(err?.message || "Fel vid hämtning");

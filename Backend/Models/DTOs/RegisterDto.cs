@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using System.ComponentModel.DataAnnotations;
 
-[Authorize(Roles ="Admin")]
+// [Authorize(Role ="Admin")]
 public class RegisterDto
 {
     [Required(ErrorMessage = "Email är obligatoriskt.")]
@@ -23,5 +23,5 @@ public class RegisterDto
 
 
     [Required(ErrorMessage = "Du måste välja en roll")]
-    public required List<string> Roles { get; set; }
+    public required string Role { get; set; }
 }
