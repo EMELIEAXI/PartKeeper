@@ -3,7 +3,7 @@ import type { User } from "../interfaces/User"
 const mockUsers: User[] = [
   {
     userId: 1,
-    admin: true,
+    role: "admin",
     firstName: "Anna",
     lastName: "Johansson",
     email: "anna.johansson@example.com",
@@ -11,7 +11,7 @@ const mockUsers: User[] = [
   },
   {
     userId: 2,
-    admin: false,
+    role: "user",
     firstName: "Erik",
     lastName: "Svensson",
     email: "erik.svensson@example.com",
@@ -19,7 +19,7 @@ const mockUsers: User[] = [
   },
   {
     userId: 3,
-    admin: false,
+    role: "user",
     firstName: "Maria",
     lastName: "Lindberg",
     email: "maria.lindberg@example.com",
@@ -27,7 +27,7 @@ const mockUsers: User[] = [
   },
   {
     userId: 4,
-    admin: true,
+    role: "user",
     firstName: "Johan",
     lastName: "Karlsson",
     email: "johan.karlsson@example.com",
@@ -35,7 +35,7 @@ const mockUsers: User[] = [
   },
   {
     userId: 5,
-    admin: false,
+    role: "user",
     firstName: "Sofia",
     lastName: "Berg",
     email: "sofia.berg@example.com",
@@ -43,7 +43,7 @@ const mockUsers: User[] = [
   },
   {
     userId: 6,
-    admin: false,
+    role: "admin",
     firstName: "Lukas",
     lastName: "Holm",
     email: "lukas.holm@example.com",
@@ -51,7 +51,7 @@ const mockUsers: User[] = [
   },
   {
     userId: 7,
-    admin: false,
+    role: "user",
     firstName: "Elin",
     lastName: "Sandström",
     email: "elin.sandstrom@example.com",
@@ -59,7 +59,7 @@ const mockUsers: User[] = [
   },
   {
     userId: 8,
-    admin: false,
+    role: "user",
     firstName: "Peter",
     lastName: "Dahl",
     email: "peter.dahl@example.com",
@@ -67,7 +67,7 @@ const mockUsers: User[] = [
   },
   {
     userId: 9,
-    admin: true,
+    role: "admin",
     firstName: "Karin",
     lastName: "Nyberg",
     email: "karin.nyberg@example.com",
@@ -75,7 +75,7 @@ const mockUsers: User[] = [
   },
   {
     userId: 10,
-    admin: false,
+    role: "user",
     firstName: "Markus",
     lastName: "Falk",
     email: "markus.falk@example.com",

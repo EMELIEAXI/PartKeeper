@@ -11,7 +11,4 @@ public class ApplicationUser : IdentityUser
     [Required(ErrorMessage = "Efternamn är obligatoriskt.")]
     [StringLength(50, ErrorMessage = "Efternamn får max vara 50 tecken.")]
     public string LastName { get; set; } = null!;
-
-    [Required]
-    public bool IsAdmin { get; set; }
 }
