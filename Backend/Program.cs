@@ -89,6 +89,17 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+    // Seed roles
+    await SeedRoles.SeedAsync(roleManager);
+
+    // Seed users
+    await SeedUsers.SeedAsync(userManager);
+}
 
 using (var scope = app.Services.CreateScope())
 {
