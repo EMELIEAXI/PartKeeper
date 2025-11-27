@@ -1,3 +1,5 @@
+import type { CreateUserRequest } from "../../interfaces/CreateUserRequest";
+
 export type User = {
   id: string;
   email: string;
@@ -47,6 +49,28 @@ export function getToken(): string | null {
 export function getCurrentUser(): User | null {
   const user = localStorage.getItem("user");
   return user ? JSON.parse(user) : null;
+}
+
+//Registrera användare
+export async function registerUser(newUser: CreateUserRequest): Promise<User> {
+  const token = getToken();
+
+  const res = await fetch("https://localhost:7089/api/Auth/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+    body: JSON.stringify(newUser),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("Register error:", text);
+    throw new Error("Kunde inte registrera användare");
+  }
+
+  return await res.json();
 }
 
 // Dev-mode login (enbart frontend)

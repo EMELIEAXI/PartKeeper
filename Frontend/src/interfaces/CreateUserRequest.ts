@@ -2,6 +2,7 @@ export interface CreateUserRequest {
   email: string;
   firstName: string;
   lastName: string;
-  phone: string;
+  password: string;
+  phoneNumber: string;
   role: "admin" | "user";
 }
