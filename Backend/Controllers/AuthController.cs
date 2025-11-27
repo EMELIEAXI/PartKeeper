@@ -1,4 +1,5 @@
 ﻿using LagerWebb.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -85,7 +86,7 @@ public class AuthController : ControllerBase
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterDto dto)
     {
@@ -109,5 +110,61 @@ public class AuthController : ControllerBase
         await _userManager.AddToRoleAsync(user, "Admin");
 
         return Ok(new { message = "Användare skapad." });
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("update/{id}")]
+    public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserDto dto)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null)
+            return NotFound(new { message = "Användare hittades inte." });
+
+        bool changed = false;
+
+        if (!string.IsNullOrEmpty(dto.UserName) && dto.UserName != user.UserName)
+        {
+            user.UserName = dto.UserName;
+            changed = true;
+        }
+
+        if (!string.IsNullOrEmpty(dto.PhoneNumber))
+        {
+            user.PhoneNumber = dto.PhoneNumber;
+            changed = true;
+        }
+
+        if (!string.IsNullOrEmpty(dto.FirstName))
+        {
+            user.FirstName = dto.FirstName;
+            changed = true;
+        }
+
+        if (!string.IsNullOrEmpty(dto.LastName))
+        {
+            user.LastName = dto.LastName;
+            changed = true;
+        }
+
+        if (changed)
+        {
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
+                return BadRequest(updateResult.Errors);
+        }
+
+        // Roller
+        if (dto.Roles != null && dto.Roles.Any())
+        {
+            var currentRoles = await _userManager.GetRolesAsync(user);
+
+            // Ta bort gamla roller
+            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+            // Lägg till nya roller
+            await _userManager.AddToRolesAsync(user, dto.Roles);
+        }
+
+        return Ok(new { message = "Användare uppdaterad." });
     }
 }
