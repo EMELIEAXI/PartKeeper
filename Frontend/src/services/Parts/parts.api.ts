@@ -1,6 +1,7 @@
 
 import type { Product } from "../../interfaces";
 import { getToken } from "../Authentication/auth.api";
+import type { CreateProductRequest } from "../../interfaces/CreateProductRequest";
 
 // Hämta alla produkter
 export async function getAllProducts(): Promise<Product[]> {
@@ -65,4 +66,25 @@ export async function getProductDetails(productId: number): Promise<Product> {
   }
 
   return await res.json();
+}
+
+//Registrera en ny produkt
+export async function createProduct(product: CreateProductRequest): Promise<void> {
+  const token = getToken();
+  if (!token) throw new Error("Ingen token tillgänglig");
+
+  const res = await fetch("https://localhost:7089/api/Parts", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+    body: JSON.stringify(product),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("Registrering av produkt error:", text);
+    throw new Error("Fel vid skapande av ny produkt");
+  }
 }
