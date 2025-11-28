@@ -13,4 +13,3 @@ public class TransactionCreateDto
 
     public string? Comment { get; set; }
 }
-
