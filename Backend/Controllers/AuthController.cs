@@ -88,7 +88,7 @@ public class AuthController : ControllerBase
     }
     [Authorize(Roles = "Admin")]
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterDto dto)
+    public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -99,6 +99,7 @@ public class AuthController : ControllerBase
             Email = dto.Email,
             FirstName = dto.FirstName,
             LastName = dto.LastName,
+            // Password = dto.Password,
             PhoneNumber = dto.PhoneNumber
         };
 
