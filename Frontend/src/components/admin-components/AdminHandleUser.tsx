@@ -4,11 +4,14 @@ import { useState } from "react";
 import AdminEditUserForm from "./AdminEditUserForm";
 import { useEffect } from "react";
 import { fetchAllUsers } from "../../services/Authentication/auth.api";
+import { deleteUser } from "../../services/Authentication/auth.api";
+import ConfirmModal from "./ConfirmModal";
 
 export default function AdminHandleUser() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState<User | null>(null); 
+  const [deleteUserTarget, setDeleteUserTarget] = useState<User | null>(null);
   
     useEffect(() => {
     loadUsers();
@@ -41,9 +44,21 @@ const reloadUsers = async () => {
   }
 };
 
-  const handleDelete = (userId: number) => {
-    console.log("Delete user:", userId);
-  };
+//   const handleDelete = async (user: User) => {
+//   const confirmDelete = window.confirm(
+//     `Är du säker att du vill ta bort ${user.userName}? Du kan inte ångra dig sen.`
+//   );
+
+//   if (!confirmDelete) return;
+//   try {
+//     await deleteUser(user.id.toString()); // kalla backend
+//     // uppdatera listan
+//     setUsers(users.filter(u => u.id !== user.id));
+//   } catch (err) {
+//     console.error(err);
+//     alert("Kunde inte ta bort användaren.");
+//   }
+// };
 
   return (
     <div className={styles.container}>
@@ -62,7 +77,12 @@ const reloadUsers = async () => {
             </div>
             <div className={styles.userActions}>
               <button className={styles.editBtn} onClick={() => handleEdit(user)}>Redigera</button>
-              <button className={styles.deleteBtn} onClick={() => handleDelete(user.id)}>Ta bort</button>
+              <button
+  className={styles.deleteBtn}
+  onClick={() => setDeleteUserTarget(user)}
+>
+  Ta bort
+</button>
             </div>
           </div>
         ))}
@@ -75,6 +95,25 @@ const reloadUsers = async () => {
           onSaved={reloadUsers}
         />
       )}
-    </div>
+   
+    {deleteUserTarget && (
+  <ConfirmModal
+    title="Bekräfta borttagning"
+    message={`Är du säker att du vill ta bort ${deleteUserTarget.userName}? Du kan inte ångra dig sen.`}
+    onCancel={() => setDeleteUserTarget(null)}
+    onConfirm={async () => {
+      try {
+        await deleteUser(deleteUserTarget.id.toString()); // kalla backend
+        setUsers(users.filter(u => u.id !== deleteUserTarget.id));
+      } catch (err) {
+        console.error(err);
+        alert("Kunde inte ta bort användaren.");
+      } finally {
+        setDeleteUserTarget(null);
+      }
+    }}
+  />
+  )}
+ </div>
   );
 }

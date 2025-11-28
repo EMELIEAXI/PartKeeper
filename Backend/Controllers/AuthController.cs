@@ -201,4 +201,16 @@ public class AuthController : ControllerBase
 
         return Ok(list);
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteUser(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null) return NotFound();
+
+        var result = await _userManager.DeleteAsync(user);
+        if (!result.Succeeded) return BadRequest("Kunde inte ta bort användaren.");
+
+        return Ok();
+    }
 }
