@@ -2,8 +2,8 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { Product } from "../../interfaces";
 import styles from "../../styles/ProductDetails.module.css";
-import { Plus, Minus } from "lucide-react";
-import { getProductDetails  } from "../../services/Parts/parts.api";
+// import { Plus, Minus } from "lucide-react";
+import { getProductDetails } from "../../services/Parts/parts.api";
 import { createTransaction } from "../../services/TransactionsApi";
 import type { CreateTransactionPayload } from "../../services/TransactionsApi";
 
@@ -22,7 +22,7 @@ export default function ProductDetails() {
 
   useEffect(() => {
     if (productId === null || isNaN(productId)) return;
-    
+
     async function load() {
       try {
         const data = await getProductDetails(productId);
@@ -54,10 +54,15 @@ export default function ProductDetails() {
 
     try {
       await createTransaction(payload);
-      setSuccess("Uttag bekräftat.");
-      setShowForm(false);
 
-      setLocalQuantity(prev => (prev !== null ? prev - quantity : quantity));
+      setSuccess("Uttag bekräftat.");
+
+      setLocalQuantity((prev) => (prev !== null ? prev - quantity : quantity));
+
+      setQuantity(1);
+      setComment("");
+
+      setShowForm(false);
 
     } catch (err) {
       if (err instanceof Error) {
@@ -69,95 +74,112 @@ export default function ProductDetails() {
   }
 
   return (
-  <div>
-    <div className={styles.productWrapper}>
-      <h1>{product.productName}</h1>
+    <div>
+      <div className={styles.productWrapper}>
+        <h1>{product.productName}</h1>
 
-      <button className={styles.updateBtn}>redigera</button>
+        <button className={styles.updateBtn}>redigera</button>
 
-      <div className={styles.productImg}>
-        <img
-          src="https://cdn.pixabay.com/photo/2023/11/15/15/54/ai-generated-8390398_1280.jpg"
-          alt="Produktbild"
-        />
-      </div>
-
-      <div className={styles.plusMinusBtn}>
-        <button><Minus /></button>
-        <button><Plus /></button>
-      </div>
-          alt="Bromsbelägg"
-      </div>
-
-      <button
-        className={styles.updateBtn}
-        onClick={() => setShowForm(prev => !prev)}
-      >
-        Hämta reservdel
-      </button>
-
-      {showForm && (
-        <form onSubmit={handleSubmit} className={styles.transactionForm}>
-          <h3>Hämta reservdel</h3>
-
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          {success && <p style={{ color: "green" }}>{success}</p>}
-
-          <label>Mängd att ta ut:</label>
-          <input
-            type="number"
-            min={1}
-            max={localQuantity ?? product.quantity}
-            value={quantity}
-            onChange={e => setQuantity(Number(e.target.value))}
+        <div className={styles.productImg}>
+          <img
+            src="https://cdn.pixabay.com/photo/2023/11/15/15/54/ai-generated-8390398_1280.jpg"
+            alt="Produktbild"
           />
+        </div>
 
-          <label>Kommentar (valfritt):</label>
-          <input
-            type="text"
-            value={comment}
-            onChange={e => setComment(e.target.value)}
-          />
-
-          <button type="submit" className={styles.updateBtn}>
-            Bekräfta uttag
+        <div className={styles.plusMinusBtn}>
+          <button
+            className={styles.centerActionBtn}
+            onClick={() => {
+              setShowForm(true);
+              setError("");
+              setSuccess("");
+            }}
+          >
+            Hämta
           </button>
-        </form>
-      )}
+        </div>
 
-      <table className={styles.productInfoTable}>
-        <tbody>
-          <tr>
-            <th>Artikelnummer: </th>
-            <td>{product.articleNumber}</td>
-          </tr>
+        {success && (
+          <p className={styles.successMessage}>{success}</p>
+        )}
 
-          <tr>
-            <th>Beskrivning: </th>
-            <td>{product.description}</td>
-          </tr>
+        {showForm && (
+          <div
+            className={styles.modalBackdrop}
+            onClick={() => setShowForm(false)}
+          >
+            <div
+              className={styles.modal}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3>Hämta reservdel</h3>
 
-          <tr>
-            <th>Lagerantal: </th>
-            <td>{localQuantity}</td>
-          </tr>
+              {error && <p className={styles.error}>{error}</p>}
 
-          <tr>
-            <th>Hyllplats:</th>
-            <td>{product.location}</td>
-          </tr>
+              <form onSubmit={handleSubmit} className={styles.form}>
+                <label>Mängd:</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={localQuantity ?? product.quantity}
+                  value={quantity}
+                  onChange={(e) => setQuantity(Number(e.target.value))}
+                  className={styles.input}
+                />
 
-          <tr>
-            <th>Kategori: </th>
-            <td>{product.categoryId}</td>
-          </tr>
+                <label>Kommentar:</label>
+                <input
+                  type="text"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  className={styles.input}
+                />
 
-          <tr>
-            <th>Minimilager: </th>
-            <td>{product.minimumStock}</td>
-          </tr>
-        </tbody>
-      </table>
+                <button type="submit" className={styles.confirmBtn}>
+                  Bekräfta uttag
+                </button>
+              </form>
+
+              <button
+                className={styles.closeModalBtn}
+                onClick={() => setShowForm(false)}
+              >
+                Stäng
+              </button>
+            </div>
+          </div>
+        )}
+
+        <table className={styles.productInfoTable}>
+          <tbody>
+            <tr>
+              <th>Artikelnummer:</th>
+              <td>{product.articleNumber}</td>
+            </tr>
+            <tr>
+              <th>Beskrivning:</th>
+              <td>{product.description}</td>
+            </tr>
+            <tr>
+              <th>Lagerantal:</th>
+              <td>{localQuantity}</td>
+            </tr>
+            <tr>
+              <th>Hyllplats:</th>
+              <td>{product.location}</td>
+            </tr>
+            <tr>
+              <th>Kategori:</th>
+              <td>{product.categoryId}</td>
+            </tr>
+            <tr>
+              <th>Minimilager:</th>
+              <td>{product.minimumStock}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
