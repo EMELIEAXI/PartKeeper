@@ -119,3 +119,20 @@ export async function fetchAllUsers() {
 
   return await res.json();
 }
+
+export async function deleteUser(userId: string): Promise<void> {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(`https://localhost:7089/api/Auth/${userId}`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("Delete user error:", text);
+    throw new Error("Kunde inte ta bort användaren");
+  }
+}
