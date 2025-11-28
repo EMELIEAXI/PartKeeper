@@ -1,4 +1,5 @@
 import type { CreateUserRequest } from "../../interfaces/CreateUserRequest";
+import type { UpdateUserDto } from "../../interfaces/UpdateUserDto";
 
 export type User = {
   id: string;
@@ -82,4 +83,39 @@ export function loginDev(role: "admin" | "user") {
   };
   localStorage.setItem("token", "dev-token");
   localStorage.setItem("user", JSON.stringify(devUser));
+}
+
+export async function updateUser(id: string, data: UpdateUserDto): Promise<void> {
+  const token = getToken();
+
+  const res = await fetch(`https://localhost:7089/api/Auth/update/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(data)
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("Update user failed:", text);
+    throw new Error("Kunde inte uppdatera användare");
+  }
+}
+
+export async function fetchAllUsers() {
+  const token = localStorage.getItem("token");
+
+  const res = await fetch("https://localhost:7089/api/Auth", {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+
+  if (!res.ok) {
+    throw new Error("Kunde inte hämta användare");
+  }
+
+  return await res.json();
 }
