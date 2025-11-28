@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -147,7 +148,12 @@ public class AuthController : ControllerBase
             user.LastName = dto.LastName;
             changed = true;
         }
-
+        if (!string.IsNullOrEmpty(dto.Role))
+        {
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            await _userManager.AddToRoleAsync(user, dto.Role);
+        }
         if (changed)
         {
             var updateResult = await _userManager.UpdateAsync(user);
@@ -156,7 +162,7 @@ public class AuthController : ControllerBase
         }
 
         // Roller
-        if (dto.Roles != null && dto.Roles.Any())
+        if (dto.Role != null && dto.Role.Any())
         {
             var currentRoles = await _userManager.GetRolesAsync(user);
 
@@ -164,9 +170,47 @@ public class AuthController : ControllerBase
             await _userManager.RemoveFromRolesAsync(user, currentRoles);
 
             // Lägg till nya roller
-            await _userManager.AddToRolesAsync(user, dto.Roles);
+            await _userManager.AddToRolesAsync(user, new[] { dto.Role });
         }
 
         return Ok(new { message = "Användare uppdaterad." });
+    }
+    [Authorize(Roles = "Admin")]
+    [HttpGet]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var users = _userManager.Users.ToList();
+        var list = new List<UserDto>();
+        foreach (var user in users)
+        {
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var role = roles.FirstOrDefault();
+
+            list.Add(new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email ?? "",
+                UserName = user.UserName ?? "",
+                FirstName = user.FirstName ?? "",
+                LastName = user.LastName ?? "",
+                PhoneNumber = user.PhoneNumber ?? "",
+                Role = role ?? "User"
+            });
+        }
+
+        return Ok(list);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteUser(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null) return NotFound();
+
+        var result = await _userManager.DeleteAsync(user);
+        if (!result.Succeeded) return BadRequest("Kunde inte ta bort användaren.");
+
+        return Ok();
     }
 }
