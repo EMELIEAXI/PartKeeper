@@ -6,7 +6,7 @@ export type User = {
   roles: string[];
 };
 
-type LoginResponse = {
+export type LoginResponse = {
   token: string;
   user: User;
 };

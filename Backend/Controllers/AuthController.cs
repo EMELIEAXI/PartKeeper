@@ -99,7 +99,7 @@ public class AuthController : ControllerBase
             Email = dto.Email,
             FirstName = dto.FirstName,
             LastName = dto.LastName,
-            Password = dto.Password,
+            // Password = dto.Password,
             PhoneNumber = dto.PhoneNumber
         };
 
