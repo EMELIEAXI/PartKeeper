@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { login as logInRequest, logout as logoutRequest } from "../services/Authentication/auth.api"
+import type { LoginResponse } from "../services/Authentication/auth.api";
 
 type User = {
   id: string;
@@ -10,7 +11,7 @@ type AuthContextType = {
   user: User | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<LoginResponse>;
     logout: () => void;
   //
 //type UserRole = "admin" | "user";
@@ -38,17 +39,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     JSON.parse(localStorage.getItem("user") || "null"));
 
 
-  const login = async (email: string, password: string) => {
-    console.log("Försöker logga in med:", email, password);
+  const login = async (email: string, password: string): Promise<LoginResponse> => {
 
     const data = await logInRequest(email, password);
 
    console.log("Resultat från API:", JSON.stringify(data, null, 2));
 
-    // localStorage.setItem("token", data.token);
-    // localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
 
     setUser(data.user);
+
+    return data;
   };
 
      const logout = () => {

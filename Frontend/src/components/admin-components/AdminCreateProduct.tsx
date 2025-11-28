@@ -7,7 +7,7 @@ export default function AdminCreateProduct() {
     <div className="background-wrapper">
 
     <form className={styles.formWrapper}>
-      <h2>Registrera nytt konto</h2>
+      <h2>Registrera ny produkt</h2>
       
       <fieldset className={styles.adminFieldset}>
 
@@ -17,6 +17,7 @@ export default function AdminCreateProduct() {
           type="text"
           id="productName"
           name="productName"
+          placeholder="Stålvajer..."
           // value={formData?.productName}
           // onChange={handleChange}
           required />
@@ -28,6 +29,7 @@ export default function AdminCreateProduct() {
           type="text"
           id="firstName"
           name="firstName"
+          placeholder="12643..."
           // value={formData?.articleNumber}
           // onChange={handleChange}
           required />
@@ -52,6 +54,42 @@ export default function AdminCreateProduct() {
           id="quantity"
           name="quantity"
           placeholder="Antal..."
+          // value={formData?.quantity}
+          // onChange={handleChange}
+          />
+        </div>
+
+        <div className={styles.formColumn}>
+          <label htmlFor="location">Hyllplats: </label>
+          <input 
+          type="text"
+          id="location"
+          name="location"
+          placeholder="Hyllplats nr..."
+          // value={formData?.quantity}
+          // onChange={handleChange}
+          />
+        </div>
+
+        <div className={styles.formColumn}>
+          <label htmlFor="minimumStock">Minimum lagersaldo: </label>
+          <input 
+          type="number"
+          id="minimumStock"
+          name="minimumStock"
+          placeholder="Minsta lagersaldo..."
+          // value={formData?.quantity}
+          // onChange={handleChange}
+          />
+        </div>
+
+        <div className={styles.formColumn}>
+          <label htmlFor="categoryId">Kategori: </label>
+          <input 
+          type="number"
+          id="categoryId"
+          name="categoryId"
+          placeholder="Kategori nummer..."
           // value={formData?.quantity}
           // onChange={handleChange}
           />

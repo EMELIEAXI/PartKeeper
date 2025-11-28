@@ -1,4 +1,5 @@
 import type { CreateUserRequest } from "../../interfaces/CreateUserRequest";
+import { registerUser } from "../../services/Authentication/auth.api";
 import styles from "../../styles/AdminCreateUser.module.css"
 import { useState } from "react";
 
@@ -7,8 +8,9 @@ export default function AdminCreateUser() {
     email: "",
     firstName: "",
     lastName: "",
-    phone: "",
-    admin: false,
+    password: "",
+    phoneNumber: "",
+    role: "user",
   });
 
   const [loading, setLoading] = useState(false);
@@ -19,7 +21,7 @@ export default function AdminCreateUser() {
 
     setFormData(prev => ({ 
       ...prev, 
-      [name]: type ==="checkbox" || type === "radio" ? checked : value,
+      [name]: type ==="checkbox" ? checked : value,
     }));
   }
 
@@ -32,27 +34,24 @@ export default function AdminCreateUser() {
       email: formData.email,
       firstName: formData.firstName,
       lastName: formData.lastName,
-      phone: formData.phone,
-      admin: formData.admin,
+      password: formData.password,
+      phoneNumber: formData.phoneNumber,
+      role: formData.role,
     };
 
     try {
-      const response = await fetch("https://localhost:5001/api/users/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) throw new Error("Kunde inte lägga till användare");
+      await registerUser(requestBody);
 
       setMessage("✔️ Användare registrerad!");
       setFormData({
         email: "",
         firstName: "",
         lastName: "",
-        phone: "",
-        admin: false,
+        password: "",
+        phoneNumber: "",
+        role: "user", //Default
       });
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setMessage("❌ Fel: " + err.message);
@@ -106,13 +105,24 @@ export default function AdminCreateUser() {
           </div>
 
           <div className={styles.formColumn}>
+            <label htmlFor="password">Lösenord: </label>
+            <input 
+            type="password"
+            name="password"
+            placeholder="lösenord..."
+            value={formData.password}
+            onChange={handleChange}
+            required />
+          </div>
+
+          <div className={styles.formColumn}>
             <label htmlFor="phoneNumber">Telefonnummer: </label>
             <input 
             type="text"
             id="phone"
-            name="phone"
+            name="phoneNumber"
             placeholder="07* *** ** **"
-            value={formData.phone}
+            value={formData.phoneNumber}
             onChange={handleChange}
             />
           </div>
@@ -120,24 +130,26 @@ export default function AdminCreateUser() {
           <div className={styles.formColumn}>
             <label>Användarroll </label>
 
-            <label htmlFor="role"> 
+            <label htmlFor="user"> 
             <input 
             type="radio"
+            id="user"
             name="role"
             value="user"
-            checked={!formData.admin}
-            onChange={() => setFormData(prev => ({ ...prev, admin: false }))}
+            checked={formData.role === "user"}
+            onChange={handleChange}
             />
             Användare
             </label>
 
-            <label htmlFor="role">
+            <label htmlFor="admin">
               <input 
               type="radio"
+              id="admin"
               name="role"
-              value="user"
-              checked={formData.admin}
-              onChange={() => setFormData(prev => ({ ...prev, admin: true }))}
+              value="admin"
+              checked={formData.role === "admin"}
+              onChange={handleChange}
               />
               Admin
             </label>

@@ -17,7 +17,7 @@ export default function LoginPage() {
   //   navigate("/home");
   // };
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
     setError("");
 
@@ -25,6 +25,7 @@ try {
   const data = await login(email, password);
   console.log("Login success:", data);
   navigate("/home");
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 } catch (err: any) {
   console.error("Login failed:", err);
   setError(err.message || "Felaktiga uppgifter");

@@ -1,4 +1,4 @@
-export const API_BASE = "https://localhost:7100/api/transactions";
+export const API_BASE = "https://localhost:7089/api/transactions";
 
 export interface CreateTransactionPayload {
     productId: number;
@@ -23,7 +23,7 @@ export async function getTransactions(): Promise<Transaction[]> {
     const response = await fetch(API_BASE, {
         method: "GET",
         headers: {
-            "Authorization": `Bearer${token}`
+            "Authorization": `Bearer ${token}`
         }
     });
 
