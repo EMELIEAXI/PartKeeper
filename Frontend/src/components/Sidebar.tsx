@@ -30,7 +30,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         <Link to="/admin/handle-user" onClick={onClose}>Hantera användare</Link>
         )}
       {isAdmin && (
-        <Link to="/admin" className={styles["nav-link"]}>Admininställningar</Link>
+        <Link to="/admin" onClick={onClose}>Admininställningar</Link>
         )}
 
       <button onClick={logout} className={styles["logout-btn"]}>Logga ut</button>
