@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "../../styles/ConfirmModal.module.css";
 
 type ConfirmModalProps = {
