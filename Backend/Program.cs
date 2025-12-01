@@ -1,3 +1,4 @@
+using LagerWebb.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +50,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddDefaultTokenProviders();
 
 var key = "MySuperUltraSecretJwtKey_2025_ABC123!!";
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ChangeLogFilter>();
+});
 
 builder.Services.AddAuthentication(options =>
 {

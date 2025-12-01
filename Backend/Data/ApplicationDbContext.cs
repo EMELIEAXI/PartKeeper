@@ -1,6 +1,7 @@
-﻿using System.ComponentModel;
+﻿using LagerWebb.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
@@ -12,6 +13,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<ChangeLog> ChangeLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
