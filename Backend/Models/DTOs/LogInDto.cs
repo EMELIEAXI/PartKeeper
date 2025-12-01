@@ -4,7 +4,8 @@ namespace LagerWebb.Models.DTOs
 {
     public class LoginDto
     {
-        [Required(ErrorMessage = "Användarnamn krävs.")]
+        [Required(ErrorMessage = "Email krävs.")]
+        [EmailAddress(ErrorMessage = "Ogiltig email.")]
         public required string Email { get; set; }
 
         [Required(ErrorMessage = "Lösenord krävs.")]

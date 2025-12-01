@@ -4,19 +4,12 @@ namespace LagerWebb.Models.DTOs
 {
     public class UserDto
     {
-        [Required]
-        public required string Id { get; set; }
-        [Required]
-        public required string Email { get; set; }
-        [Required]
-        public required string UserName { get; set; }
-        [Required]
-        public required string FirstName { get; set; }
-        [Required]
-        public required string LastName { get; set; }
-        [Required]
-        public required string PhoneNumber { get; set; }
-        [Required]
-        public required string Role { get; set; }
+        public string Id { get; set; } = "";
+        public string Email { get; set; } = "";
+        public string UserName { get; set; } = "";
+        public string FirstName { get; set; } = "";
+        public string LastName { get; set; } = "";
+        public string PhoneNumber { get; set; } = "";
+        public string Role { get; set; } = "";
     }
 }
