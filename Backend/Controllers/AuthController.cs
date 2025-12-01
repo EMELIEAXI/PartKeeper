@@ -56,7 +56,7 @@ public class AuthController : ControllerBase
             {
                 id = user.Id,
                 email = user.Email,
-                role = roles
+                roles = roles
             }
         });
     }
