@@ -19,6 +19,7 @@ public class RegisterDto
     public required string LastName { get; set; }
 
     [Required(ErrorMessage = "Du måste ange telefonnummer")]
+    [Phone(ErrorMessage = "Ogiltigt telefonnummer.")]
     public required string PhoneNumber { get; set; }
 
 

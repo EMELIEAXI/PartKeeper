@@ -29,26 +29,43 @@ public class PartsController : ControllerBase
         if (page < 1 || pageSize < 1)
             return BadRequest(new { message = "page och pageSize måste vara större än 0." });
 
-        // Om pagination/sök-sort är angivet → använd nya logiken
-        if (!string.IsNullOrWhiteSpace(search) || !string.IsNullOrWhiteSpace(sort) || page > 1 || pageSize != 10)
+        // Om filtrering eller pagination används → kör filter/pagination
+        bool usePaged =
+            !string.IsNullOrWhiteSpace(search) ||
+            !string.IsNullOrWhiteSpace(sort) ||
+            categoryId.HasValue ||
+            inStock.HasValue ||
+            !string.IsNullOrWhiteSpace(name) ||
+            !string.IsNullOrWhiteSpace(articleNumber) ||
+            page > 1 ||
+            pageSize != 10;
+
+        if (usePaged)
         {
-            var pagedResult = await _service.GetFilteredPagedPartsAsync(search, sort, categoryId, inStock, name, articleNumber, page, pageSize);
-            return Ok(pagedResult);
+            var paged = await _service.GetFilteredPagedPartsAsync
+            (
+                search, sort, categoryId, inStock,
+                name, articleNumber, page, pageSize
+            );
+
+            return Ok(paged);
         }
 
-        // Fallback → returnera ALLT (som tidigare)
-        var parts = await _service.GetAllPartsAsync();
-
-        var result = parts.Select(p => new ProductReadDto
+        // Annars → hämta allt
+        var all = await _service.GetAllPartsAsync();
+        var dto = all.Select(p => new ProductReadDto
         {
             Id = p.ProductId,
             ProductName = p.ProductName,
             ArticleNumber = p.ArticleNumber,
             Quantity = p.Quantity,
-            Description = p.Description
+            Description = p.Description,
+            CategoryId = p.CategoryId,
+            MinimumStock = p.MinimumStock,
+            Location = p.Location
         });
 
-        return Ok(result);
+        return Ok(dto);
     }
 
     [HttpGet("{id}")]
@@ -64,7 +81,11 @@ public class PartsController : ControllerBase
             Id = part.ProductId,
             ProductName = part.ProductName,
             ArticleNumber = part.ArticleNumber,
-            Quantity = part.Quantity
+            Quantity = part.Quantity,
+            Description = part.Description,
+            CategoryId = part.CategoryId,
+            MinimumStock = part.MinimumStock,
+            Location = part.Location
         };
 
         return Ok(dto);
@@ -168,8 +189,8 @@ public class PartsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var success = await _service.GetPartByIdAsync(id);
-        if (success == null)
+        var part = await _service.GetPartByIdAsync(id);
+        if (part == null)
             return NotFound(new { message = $"Produkten med id {id} hittades inte." });
 
 

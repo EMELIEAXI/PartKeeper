@@ -29,6 +29,9 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
+        if (dto == null)
+            return BadRequest(new { message = "Request body saknas." });
+
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
@@ -40,6 +43,7 @@ public class AuthController : ControllerBase
 
         if (!await _userManager.CheckPasswordAsync(user, dto.Password))
             return Unauthorized(new { message = "Fel e-post eller lösenord." });
+       
 
         var roles = await _userManager.GetRolesAsync(user);
 
@@ -52,7 +56,7 @@ public class AuthController : ControllerBase
             {
                 id = user.Id,
                 email = user.Email,
-                roles = roles
+                role = roles
             }
         });
     }
@@ -61,6 +65,7 @@ public class AuthController : ControllerBase
     {
         var claims = new List<Claim>
         {
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(ClaimTypes.Name, user.UserName)
@@ -104,6 +109,7 @@ public class AuthController : ControllerBase
             PhoneNumber = dto.PhoneNumber
         };
 
+
         var result = await _userManager.CreateAsync(user, dto.Password);
 
         if (!result.Succeeded)
@@ -119,7 +125,12 @@ public class AuthController : ControllerBase
     [HttpPut("update/{id}")]
     public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserDto dto)
     {
+
+        if (dto == null)
+            return BadRequest(new { message = "Request body saknas." });
+
         var user = await _userManager.FindByIdAsync(id);
+
         if (user == null)
             return NotFound(new { message = "Användare hittades inte." });
 
@@ -158,20 +169,9 @@ public class AuthController : ControllerBase
         {
             var updateResult = await _userManager.UpdateAsync(user);
             if (!updateResult.Succeeded)
-                return BadRequest(updateResult.Errors);
+                return BadRequest(new { errors = updateResult.Errors.Select(e => e.Description) });
         }
 
-        // Roller
-        if (dto.Role != null && dto.Role.Any())
-        {
-            var currentRoles = await _userManager.GetRolesAsync(user);
-
-            // Ta bort gamla roller
-            await _userManager.RemoveFromRolesAsync(user, currentRoles);
-
-            // Lägg till nya roller
-            await _userManager.AddToRolesAsync(user, new[] { dto.Role });
-        }
 
         return Ok(new { message = "Användare uppdaterad." });
     }
@@ -209,7 +209,7 @@ public class AuthController : ControllerBase
         if (user == null) return NotFound();
 
         var result = await _userManager.DeleteAsync(user);
-        if (!result.Succeeded) return BadRequest("Kunde inte ta bort användaren.");
+        if (!result.Succeeded) return BadRequest(new { errors = result.Errors.Select(e => e.Description) });
 
         return Ok();
     }
