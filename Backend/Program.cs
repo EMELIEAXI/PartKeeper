@@ -86,11 +86,11 @@ builder.Services.AddRateLimiter(options =>
         // Definiera limiter
         return RateLimitPartition.GetSlidingWindowLimiter(clientIp, _ => new SlidingWindowRateLimiterOptions
         {
-            PermitLimit = 50,             // max 5 requests
+            PermitLimit = 100,          
             Window = TimeSpan.FromMinutes(1),
             SegmentsPerWindow = 10,      // delar fönstret i mindre segment
             QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-            QueueLimit = 20                // inga requests i kö
+            QueueLimit = 20                // 20 requests i kö
         });
     });
 
