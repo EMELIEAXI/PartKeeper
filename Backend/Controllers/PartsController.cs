@@ -61,8 +61,8 @@ public class PartsController : ControllerBase
             Quantity = p.Quantity,
             Description = p.Description,
             CategoryId = p.CategoryId,
-            MinimumStock = p.MinimumStock,
-            Location = p.Location
+            Location = p.Location,
+            MinimumStock = p.MinimumStock
         });
 
         return Ok(dto);
@@ -82,10 +82,10 @@ public class PartsController : ControllerBase
             ProductName = part.ProductName,
             ArticleNumber = part.ArticleNumber,
             Quantity = part.Quantity,
-            Description = part.Description,
             CategoryId = part.CategoryId,
             MinimumStock = part.MinimumStock,
-            Location = part.Location
+            Location = part.Location,
+            Description = part.Description
         };
 
         return Ok(dto);
