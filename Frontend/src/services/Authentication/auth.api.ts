@@ -1,15 +1,24 @@
 import type { CreateUserRequest } from "../../interfaces/CreateUserRequest";
 import type { UpdateUserDto } from "../../interfaces/UpdateUserDto";
+import type { User } from "../../context/AuthContext";
 
-export type User = {
-  id: string;
-  email: string;
-  roles: string[];
-};
+// export type User = {
+//   id: string;
+//   email: string;
+//   roles: string[];
+// };
 
 export type LoginResponse = {
   token: string;
-  user: User;
+  user: {
+    id: string;
+    email: string;
+    userName: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    roles: string[];
+  };
 };
 
 // Logga in med email och lösenord
@@ -31,7 +40,6 @@ export async function login(email: string, password: string): Promise<LoginRespo
   // Spara token och user i localStorage
   localStorage.setItem("token", data.token);
   localStorage.setItem("user", JSON.stringify(data.user));
-
   return data;
 }
 
@@ -75,15 +83,15 @@ export async function registerUser(newUser: CreateUserRequest): Promise<User> {
 }
 
 // Dev-mode login (enbart frontend)
-export function loginDev(role: "admin" | "user") {
-  const devUser: User = {
-    id: "dev-user-id",
-    email: "dev@example.com",
-    roles: [role === "admin" ? "Admin" : "User"],
-  };
-  localStorage.setItem("token", "dev-token");
-  localStorage.setItem("user", JSON.stringify(devUser));
-}
+// export function loginDev(role: "admin" | "user") {
+//   const devUser: User = {
+//     id: "dev-user-id",
+//     email: "dev@example.com",
+//     roles: [role === "admin" ? "Admin" : "User"],
+//   };
+//   localStorage.setItem("token", "dev-token");
+//   localStorage.setItem("user", JSON.stringify(devUser));
+// }
 
 export async function updateUser(id: string, data: UpdateUserDto): Promise<void> {
   const token = getToken();
