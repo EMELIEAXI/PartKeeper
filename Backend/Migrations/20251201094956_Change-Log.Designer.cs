@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LagerWebb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251119101202_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251201094956_Change-Log")]
+    partial class ChangeLog
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,11 +45,13 @@ namespace LagerWebb.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -107,7 +109,8 @@ namespace LagerWebb.Migrations
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("CategoryId");
 
@@ -117,13 +120,46 @@ namespace LagerWebb.Migrations
                         new
                         {
                             CategoryId = 1,
-                            CategoryName = "Wire"
+                            CategoryName = "Kategori1"
                         },
                         new
                         {
                             CategoryId = 2,
-                            CategoryName = "Accessories"
+                            CategoryName = "Kategori2"
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            CategoryName = "Kategori3"
                         });
+                });
+
+            modelBuilder.Entity("LagerWebb.Models.ChangeLog", b =>
+                {
+                    b.Property<int>("ChangeLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ChangeLogId"));
+
+                    b.Property<string>("Endpoint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HttpMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ChangeLogId");
+
+                    b.ToTable("ChangeLogs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -269,7 +305,8 @@ namespace LagerWebb.Migrations
 
                     b.Property<string>("ArticleNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -278,17 +315,20 @@ namespace LagerWebb.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("MinimumStock")
                         .HasColumnType("int");
 
                     b.Property<string>("ProductName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -305,36 +345,30 @@ namespace LagerWebb.Migrations
                             ProductId = 1,
                             ArticleNumber = "19446",
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Stållina för diverse användning",
-                            Location = "A1",
-                            MinimumStock = 10,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            MinimumStock = 0,
                             ProductName = "Stållina",
-                            Quantity = 100
+                            Quantity = 0
                         },
                         new
                         {
                             ProductId = 2,
                             ArticleNumber = "45237",
                             CategoryId = 2,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Ledare för lina",
-                            Location = "B2",
-                            MinimumStock = 5,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            MinimumStock = 0,
                             ProductName = "Linledare",
-                            Quantity = 50
+                            Quantity = 0
                         },
                         new
                         {
                             ProductId = 3,
                             ArticleNumber = "124639",
                             CategoryId = 2,
-                            CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Förpackning med knappar",
-                            Location = "B3",
-                            MinimumStock = 20,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            MinimumStock = 0,
                             ProductName = "Knappar",
-                            Quantity = 200
+                            Quantity = 0
                         });
                 });
 
@@ -347,7 +381,8 @@ namespace LagerWebb.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"));
 
                     b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("NewQuantity")
                         .HasColumnType("int");
@@ -363,7 +398,8 @@ namespace LagerWebb.Migrations
 
                     b.Property<string>("TransactionType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -434,7 +470,7 @@ namespace LagerWebb.Migrations
                     b.HasOne("Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Category");

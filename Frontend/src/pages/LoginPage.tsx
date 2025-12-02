@@ -64,29 +64,7 @@ try {
 
           <div className={styles ["form-button"]}>
             <button type="submit">Logga in</button> 
-
-            {/* //* DEV-MODE INLOGG
-            <hr />
-            <p><strong>Dev-mode: login</strong></p>
-            
-            <button
-            type="button"
-            onClick={() => {
-              loginDev("user");
-              navigate("/home");
-            }}>
-              Logga in som användare *Dev-mode*
-              </button>
-
-            <button
-            type="button"
-            onClick={() => {
-              loginDev("admin");
-              navigate("/home")
-            }}>
-              Logga in som admin *Dev-mode* }
-            </button>*/ }
-        </div>
+          </div>
 
         </fieldset>
       </form>

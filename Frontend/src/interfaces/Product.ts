@@ -4,6 +4,7 @@ export interface Product {
   productName: string;
   description: string;
   categoryId: number;
+  categoryName: string;
   quantity: number;
   location: string;
   minimumStock: number;

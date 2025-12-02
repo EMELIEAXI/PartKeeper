@@ -42,7 +42,8 @@ namespace LagerWebb.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -108,24 +109,52 @@ namespace LagerWebb.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
                         {
                             CategoryId = 1,
-                            CategoryName = "Kategori1"
+                            CategoryName = "Abus"
                         },
                         new
                         {
                             CategoryId = 2,
-                            CategoryName = "Kategori2"
+                            CategoryName = "Gigasense"
                         },
                         new
                         {
                             CategoryId = 3,
-                            CategoryName = "Kategori3"
+                            CategoryName = "Dematek"
                         });
+                });
+
+            modelBuilder.Entity("LagerWebb.Models.ChangeLog", b =>
+                {
+                    b.Property<int>("ChangeLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ChangeLogId"));
+
+                    b.Property<string>("Endpoint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HttpMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ChangeLogId");
+
+                    b.ToTable("ChangeLogs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -299,7 +328,7 @@ namespace LagerWebb.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
 
                     b.HasData(
                         new
@@ -308,9 +337,9 @@ namespace LagerWebb.Migrations
                             ArticleNumber = "19446",
                             CategoryId = 1,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MinimumStock = 0,
+                            MinimumStock = 10,
                             ProductName = "Stållina",
-                            Quantity = 0
+                            Quantity = 50
                         },
                         new
                         {
@@ -318,19 +347,19 @@ namespace LagerWebb.Migrations
                             ArticleNumber = "45237",
                             CategoryId = 2,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MinimumStock = 0,
+                            MinimumStock = 10,
                             ProductName = "Linledare",
-                            Quantity = 0
+                            Quantity = 5
                         },
                         new
                         {
                             ProductId = 3,
                             ArticleNumber = "124639",
-                            CategoryId = 2,
+                            CategoryId = 3,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MinimumStock = 0,
+                            MinimumStock = 4,
                             ProductName = "Knappar",
-                            Quantity = 0
+                            Quantity = 5
                         });
                 });
 
@@ -371,7 +400,7 @@ namespace LagerWebb.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Transactions", (string)null);
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

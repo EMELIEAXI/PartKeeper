@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using LagerWebb.Models.DTOs;
 using System;
 
 [Route("api/[controller]")]
@@ -35,7 +36,7 @@ public class CategoriesController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPost]
-	public async Task<IActionResult> CreateCategory([FromBody] Category category)
+	public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDto dto)
 	{
         if (!ModelState.IsValid)
         {
@@ -47,6 +48,11 @@ public class CategoriesController : ControllerBase
             });
         }
 
+        var category = new Category
+        {
+            CategoryName = dto.CategoryName
+        };
+
         _context.Categories.Add(category);
 		await _context.SaveChangesAsync();
 
@@ -55,19 +61,23 @@ public class CategoriesController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPut("{id}")]
-	public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
+	public async Task<IActionResult> UpdateCategory(int id, [FromBody] UpdateCategoryDto dto)
 	{
-		if (id != category.CategoryId)
-			return BadRequest(new { message = "Id	 matchar inte kategorin." });
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(new
+            {
+                errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+            });
+        }
 
-		if (!ModelState.IsValid)
-			return BadRequest(ModelState);
-
-		var existing = await _context.Categories.FindAsync(id);
+        var existing = await _context.Categories.FindAsync(id);
 		if (existing == null)
 			return NotFound(new { message = $"Kategori med id {id} hittades inte." });
 
-		existing.CategoryName = category.CategoryName;
+		existing.CategoryName = dto.CategoryName;
 
 		await _context.SaveChangesAsync();
 		return NoContent();

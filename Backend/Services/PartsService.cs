@@ -136,26 +136,28 @@ public class PartsService
     }
 
     public async Task<object> GetFilteredPagedPartsAsync(
-    string? search,
-    string? sort,
-    int? categoryId,
-    bool? inStock,
-    string? name,
-    string? articleNumber,
-    int page,
-    int pageSize)
-    {
+        string? search,
+        string? sortBy,
+        string? sortOrder,
+        int? categoryId,
+        bool? inStock,
+        string? name,
+        string? articleNumber,
+        int page,
+        int pageSize)
+    { 
         var query = _context.Products
-    .Include(p => p.Category)
-    .AsQueryable();
+            .Include(p => p.Category)
+            .AsQueryable();
 
         // 🔍 Dynamisk filtrering ---------------------------------------------
 
         // Fritext-sökning
         if (!string.IsNullOrWhiteSpace(search))
             query = query.Where(p =>
-                p.ProductName.Contains(search) ||
-                p.ArticleNumber.Contains(search));
+                p.ProductName.ToLower().Contains(search) ||
+                p.ArticleNumber.ToLower().Contains(search) ||
+                p.Category.CategoryName.ToLower().Contains(search));
 
         // Filtrera på kategori
         if (categoryId.HasValue)
@@ -178,14 +180,25 @@ public class PartsService
             query = query.Where(p => p.ArticleNumber.Contains(articleNumber));
 
         // 🔽 Sortering --------------------------------------------------------
-        sort = sort?.ToLower();
-        query = sort switch
-        {
-            "desc" => query.OrderByDescending(p => p.ProductName),
-            "asc" => query.OrderBy(p => p.ProductName),
-            _ => query.OrderBy(p => p.ProductId)
-        };
+        sortBy = sortBy?.ToLower() ?? "productname";  // default
+        sortOrder = sortOrder?.ToLower() ?? "asc";    // default
 
+        query = (sortBy, sortOrder) switch
+        {
+            ("productname", "asc") => query.OrderBy(p => p.ProductName),
+            ("productname", "desc") => query.OrderByDescending(p => p.ProductName),
+
+            ("articlenumber", "asc") => query.OrderBy(p => p.ArticleNumber),
+            ("articlenumber", "desc") => query.OrderByDescending(p => p.ArticleNumber),
+
+            ("quantity", "asc") => query.OrderBy(p => p.Quantity),
+            ("quantity", "desc") => query.OrderByDescending(p => p.Quantity),
+
+            ("category", "asc") => query.OrderBy(p => p.Category.CategoryName),
+            ("category", "desc") => query.OrderByDescending(p => p.Category.CategoryName),
+
+            _ => query.OrderBy(p => p.ProductId) // fallback
+        };
         // 📊 Totalt antal
         var totalItems = await query.CountAsync();
         var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
@@ -200,7 +213,11 @@ public class PartsService
                 ProductName = p.ProductName,
                 ArticleNumber = p.ArticleNumber,
                 Quantity = p.Quantity,
-                Description = p.Description
+                CategoryId = p.CategoryId,
+                CategoryName = p.Category.CategoryName,
+                Description = p.Description,
+                Location = p.Location,
+                MinimumStock = p.MinimumStock
             })
             .ToListAsync();
 
@@ -212,5 +229,6 @@ public class PartsService
             totalPages,
             items
         };
+
     }
 }

@@ -16,8 +16,9 @@ public class PartsController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetParts(
-         string? search,
-        string? sort,
+        string? search,
+        string? sortBy,
+        string? sortOrder,
         int? categoryId,
         bool? inStock,
         string? name,
@@ -29,17 +30,32 @@ public class PartsController : ControllerBase
         if (page < 1 || pageSize < 1)
             return BadRequest(new { message = "page och pageSize måste vara större än 0." });
 
-        // Om pagination/sök-sort är angivet → använd nya logiken
-        if (!string.IsNullOrWhiteSpace(search) || !string.IsNullOrWhiteSpace(sort) || page > 1 || pageSize != 10)
+        // Om filtrering eller pagination används → kör filter/pagination
+        bool usePaged =
+            !string.IsNullOrWhiteSpace(search) ||
+            !string.IsNullOrWhiteSpace(sortBy) ||
+            !string.IsNullOrWhiteSpace(sortOrder) ||
+            categoryId.HasValue ||
+            inStock.HasValue ||
+            !string.IsNullOrWhiteSpace(name) ||
+            !string.IsNullOrWhiteSpace(articleNumber) ||
+            page > 1 ||
+            pageSize != 10;
+
+        if (usePaged)
         {
-            var pagedResult = await _service.GetFilteredPagedPartsAsync(search, sort, categoryId, inStock, name, articleNumber, page, pageSize);
-            return Ok(pagedResult);
+            var paged = await _service.GetFilteredPagedPartsAsync
+            (
+                search, sortBy, sortOrder, categoryId, inStock,
+                name, articleNumber, page, pageSize
+            );
+
+            return Ok(paged);
         }
 
-        // Fallback → returnera ALLT (som tidigare)
-        var parts = await _service.GetAllPartsAsync();
-
-        var result = parts.Select(p => new ProductReadDto
+        // Annars → hämta allt
+        var all = await _service.GetAllPartsAsync();
+        var dto = all.Select(p => new ProductReadDto
         {
             Id = p.ProductId,
             ProductName = p.ProductName,
@@ -52,7 +68,7 @@ public class PartsController : ControllerBase
             CreatedAt = p.CreatedAt
         });
 
-        return Ok(result);
+        return Ok(dto);
     }
 
     [HttpGet("{id}")]
@@ -178,8 +194,8 @@ public class PartsController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var success = await _service.GetPartByIdAsync(id);
-        if (success == null)
+        var part = await _service.GetPartByIdAsync(id);
+        if (part == null)
             return NotFound(new { message = $"Produkten med id {id} hittades inte." });
 
 
