@@ -2,11 +2,20 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 import { login as logInRequest, logout as logoutRequest } from "../services/Authentication/auth.api"
 import type { LoginResponse } from "../services/Authentication/auth.api";
 
-type User = {
-  id: string;
+export interface User {
+  id: number;
   email: string;
-  roles: string[];
-};
+  userName: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  role: "Admin" | "User";
+}
+// type User = {
+//   id: string;
+//   email: string;
+//   roles: string[];
+// };
 type AuthContextType = {
   user: User | null;
   token: string | null;
@@ -31,14 +40,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const data = await logInRequest(email, password);
 
+    // Mappa API-användaren till frontend User-interface
+    const mappedUser: User = {
+      id: Number(data.user.id),
+      email: data.user.email,
+      userName: data.user.userName || "",
+      firstName: data.user.firstName || "",
+      lastName: data.user.lastName || "",
+      phoneNumber: data.user.phoneNumber || "",
+      role: data.user.roles.includes("Admin") ? "Admin" : "User",
+    };
+
    console.log("Resultat från API:", JSON.stringify(data, null, 2));
 
     localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("user", JSON.stringify(mappedUser));
+    
+    console.log("Mapped User:", mappedUser);
 
-    setUser(data.user);
+      setUser(mappedUser);
     setToken(data.token);
-
     return data;
   };
 
@@ -51,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const isAuthenticated = !!token;
-  const isAdmin = user?.roles.includes("Admin") ?? false;
+  const isAdmin = user?.role === "Admin";
   return (
     <AuthContext.Provider value={{ user, token, isAuthenticated, isAdmin, login, logout }}>
       {children}
