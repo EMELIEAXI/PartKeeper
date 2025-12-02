@@ -11,9 +11,9 @@ namespace LagerWebb.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "IsAdmin",
-                table: "AspNetUsers");
+            //migrationBuilder.DropColumn(
+            //    name: "IsAdmin",
+            //    table: "AspNetUsers");
 
             migrationBuilder.CreateTable(
                 name: "ChangeLogs",
@@ -33,17 +33,17 @@ namespace LagerWebb.Migrations
         }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "ChangeLogs");
+        //protected override void Down(MigrationBuilder migrationBuilder)
+        //{
+        //    migrationBuilder.DropTable(
+        //        name: "ChangeLogs");
 
-            migrationBuilder.AddColumn<bool>(
-                name: "IsAdmin",
-                table: "AspNetUsers",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
-        }
+        //    migrationBuilder.AddColumn<bool>(
+        //        name: "IsAdmin",
+        //        table: "AspNetUsers",
+        //        type: "bit",
+        //        nullable: false,
+        //        defaultValue: false);
+        //}
     }
 }

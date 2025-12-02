@@ -117,17 +117,17 @@ namespace LagerWebb.Migrations
                         new
                         {
                             CategoryId = 1,
-                            CategoryName = "Kategori1"
+                            CategoryName = "Abus"
                         },
                         new
                         {
                             CategoryId = 2,
-                            CategoryName = "Kategori2"
+                            CategoryName = "Gigasense"
                         },
                         new
                         {
                             CategoryId = 3,
-                            CategoryName = "Kategori3"
+                            CategoryName = "Dematek"
                         });
                 });
 
@@ -343,9 +343,9 @@ namespace LagerWebb.Migrations
                             ArticleNumber = "19446",
                             CategoryId = 1,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MinimumStock = 0,
+                            MinimumStock = 10,
                             ProductName = "Stållina",
-                            Quantity = 0
+                            Quantity = 50
                         },
                         new
                         {
@@ -353,19 +353,19 @@ namespace LagerWebb.Migrations
                             ArticleNumber = "45237",
                             CategoryId = 2,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MinimumStock = 0,
+                            MinimumStock = 10,
                             ProductName = "Linledare",
-                            Quantity = 0
+                            Quantity = 5
                         },
                         new
                         {
                             ProductId = 3,
                             ArticleNumber = "124639",
-                            CategoryId = 2,
+                            CategoryId = 3,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            MinimumStock = 0,
+                            MinimumStock = 4,
                             ProductName = "Knappar",
-                            Quantity = 0
+                            Quantity = 5
                         });
                 });
 

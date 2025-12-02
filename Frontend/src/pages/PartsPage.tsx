@@ -46,7 +46,7 @@ export default function PartsPage() {
       <div className={styles.topRow}>
         <button className={styles.addBtn} onClick={() => navigate("/admin/create-product")}>+</button>
       </div>
-      <ProductSearch products={products} />
+      <ProductSearch/>
     </div>
     </>
   );

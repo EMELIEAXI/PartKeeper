@@ -16,8 +16,9 @@ public class PartsController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> GetParts(
-         string? search,
-        string? sort,
+        string? search,
+        string? sortBy,
+        string? sortOrder,
         int? categoryId,
         bool? inStock,
         string? name,
@@ -32,7 +33,8 @@ public class PartsController : ControllerBase
         // Om filtrering eller pagination används → kör filter/pagination
         bool usePaged =
             !string.IsNullOrWhiteSpace(search) ||
-            !string.IsNullOrWhiteSpace(sort) ||
+            !string.IsNullOrWhiteSpace(sortBy) ||
+            !string.IsNullOrWhiteSpace(sortOrder) ||
             categoryId.HasValue ||
             inStock.HasValue ||
             !string.IsNullOrWhiteSpace(name) ||
@@ -44,7 +46,7 @@ public class PartsController : ControllerBase
         {
             var paged = await _service.GetFilteredPagedPartsAsync
             (
-                search, sort, categoryId, inStock,
+                search, sortBy, sortOrder, categoryId, inStock,
                 name, articleNumber, page, pageSize
             );
 
