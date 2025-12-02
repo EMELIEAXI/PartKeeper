@@ -1,7 +1,9 @@
 .contentWrapper {
   display: flex;
   flex-direction: column;
+  margin-bottom: 100px;
 }
+
 
 .inputbox {
   padding: 1rem;
@@ -9,4 +11,44 @@
   border-radius: 2rem;
   max-width: 400px;
   width: 100%;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table a {
+  text-decoration: none;
+  color: inherit;
+}
+.table th, .table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.table th {
+  cursor: pointer;
+  background: #eee;
+  color: black;
+  padding: 8px;
+  border-bottom: 2px solid #ccc;
+}
+
+
+.table td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  color: black;
+}
+
+.table tr:hover {
+  background-color: #f1f7ff;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  color: black;
 }

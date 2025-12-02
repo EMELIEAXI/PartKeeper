@@ -9,6 +9,7 @@ namespace LagerWebb.Models.DTOs
         public string ArticleNumber { get; set; } = string.Empty;
         public int Quantity { get; set; }
         public int CategoryId { get; set; }
+        public string CategoryName { get; set; } = string.Empty;
         public string? Location { get; set; }
         public int MinimumStock { get; set; }
         public string? Description { get; set; }
