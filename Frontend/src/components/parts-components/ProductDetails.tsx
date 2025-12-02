@@ -1,5 +1,6 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 import type { Product } from "../../interfaces";
 import styles from "../../styles/ProductDetails.module.css";
 // import { Plus, Minus } from "lucide-react";
@@ -10,6 +11,7 @@ import type { CreateTransactionPayload } from "../../services/TransactionsApi";
 export default function ProductDetails() {
   const { id } = useParams();
   const productId = Number(id);
+  const { isAdmin } = useAuth();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -19,6 +21,7 @@ export default function ProductDetails() {
   const [comment, setComment] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (productId === null || isNaN(productId)) return;
@@ -78,7 +81,9 @@ export default function ProductDetails() {
       <div className={styles.productWrapper}>
         <h1>{product.productName}</h1>
 
-        <button className={styles.updateBtn}>redigera</button>
+        { isAdmin && (
+        <button className={styles.updateBtn} onClick={() => navigate("/admin/handle-product")}>redigera</button>
+      )}
 
         <div className={styles.productImg}>
           <img

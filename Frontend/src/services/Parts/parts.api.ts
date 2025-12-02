@@ -1,5 +1,5 @@
 
-import type { Product } from "../../interfaces";
+import type { Category, Product } from "../../interfaces";
 import { getToken } from "../Authentication/auth.api";
 import type { CreateProductRequest } from "../../interfaces/CreateProductRequest";
 
@@ -21,7 +21,22 @@ export async function getAllProducts(): Promise<Product[]> {
     throw new Error("Fel vid hämtning av produkter");
   }
 
-  return await res.json();
+  const data = await res.json();
+  console.log("Produkter från backend:", data)
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return data.map((p: any) => ({
+    id: p.id,
+    productName: p.productName,
+    articleNumber: p.articleNumber,
+    quantity: p.quantity,
+    categoryId: p.categoryId,
+    minimumStock: p.minimumStock,
+    location: p.location,
+    description: p.description,
+    createdAt: new Date(p.createdAt)
+  }));
+  // return await res.json();
 }
 
 // Hämta produkter med lågt lagersaldo
@@ -87,4 +102,72 @@ export async function createProduct(product: CreateProductRequest): Promise<void
     console.error("Registrering av produkt error:", text);
     throw new Error("Fel vid skapande av ny produkt");
   }
+}
+
+// Uppdate produkt
+export async function updateProduct(id: number, product: Product): Promise<void> {
+  const token = getToken();
+  if (!token) throw new Error("Ingen roken tillgänglig!");
+
+  const res = await fetch(`https://localhost:7089/api/Parts/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      productName: product.productName,
+      articleNumber: product.articleNumber,
+      quantity: product.quantity,
+      categoryId: product.categoryId,
+      location: product.location,
+      minimumStock: product.minimumStock,
+      description: product.description
+    }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("Update product error:", text);
+    throw new Error("Fel vid uppdatering av produkt");
+  }
+}
+
+// Radera en produkt
+export async function deleteProduct(id: number): Promise<void> {
+  const token = getToken();
+
+  const res = await fetch(`https://localhost:7089/api/Parts/${id}`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("Delete error:", text);
+    throw new Error("Fel vid radering av produkt");
+  }
+}
+
+// Hämta befintliga kategorier
+export async function getCategories(): Promise<Category[]> {
+  const token = getToken();
+  if (!token) throw new Error("Ingen token tillgänglig!")
+
+  const res = await fetch("https://localhost:7089/api/Categories", {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("Fetch categories error:", text);
+    throw new Error("Kunde inte hämta kategorier");
+  }
+
+  return await res.json();
 }

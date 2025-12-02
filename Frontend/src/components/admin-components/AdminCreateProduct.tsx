@@ -95,8 +95,7 @@ export default function AdminCreateProduct() {
           id="description"
           placeholder="Max 100 ord..."
           value={formData?.description}
-          onChange={handleChange}
-          required />
+          onChange={handleChange} />
         </div>
 
         <div className={styles.formColumn}>

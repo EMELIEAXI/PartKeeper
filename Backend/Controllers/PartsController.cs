@@ -63,8 +63,9 @@ public class PartsController : ControllerBase
             Quantity = p.Quantity,
             Description = p.Description,
             CategoryId = p.CategoryId,
+            MinimumStock = p.MinimumStock,
             Location = p.Location,
-            MinimumStock = p.MinimumStock
+            CreatedAt = p.CreatedAt
         });
 
         return Ok(dto);
@@ -87,6 +88,7 @@ public class PartsController : ControllerBase
             CategoryId = part.CategoryId,
             MinimumStock = part.MinimumStock,
             Location = part.Location,
+            CreatedAt = part.CreatedAt,
             Description = part.Description
         };
 
@@ -139,7 +141,8 @@ public class PartsController : ControllerBase
             CategoryId = created.CategoryId,
             Location = created.Location,
             MinimumStock = created.MinimumStock,
-            Description = created.Description
+            Description = created.Description,
+            CreatedAt = created.CreatedAt
         };
 
         return CreatedAtAction(nameof(GetById), new { id = created.ProductId }, readDto);
