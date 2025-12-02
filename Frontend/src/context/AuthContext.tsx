@@ -9,28 +9,13 @@ type User = {
 };
 type AuthContextType = {
   user: User | null;
+  token: string | null;
   isAuthenticated: boolean;
   isAdmin: boolean;
   login: (email: string, password: string) => Promise<LoginResponse>;
-    logout: () => void;
-  //
-//type UserRole = "admin" | "user";
-
-//type AuthContextType = {
-  //token: string | null;
-  //user: { email: string; role: UserRole } | null;
-  //isAuthenticated: boolean;
-  //isAdmin: boolean;
-  //login: (email: string, password: string) => Promise<boolean>;
-  //loginDev: (role: UserRole) => void;
-  //logout: () => void;
+  logout: () => void;
 };
-// type AuthContextType = {
-//   isAuthenticated: boolean;
-//   isAdmin: boolean;
-//   login: (admin?: boolean) => void;
-//   logout: () => void;
-// };
+
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -38,6 +23,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(
     JSON.parse(localStorage.getItem("user") || "null"));
 
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token")
+    );
 
   const login = async (email: string, password: string): Promise<LoginResponse> => {
 
@@ -49,18 +37,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("user", JSON.stringify(data.user));
 
     setUser(data.user);
+    setToken(data.token);
 
     return data;
   };
 
-     const logout = () => {
+    const logout = () => {
     logoutRequest();
     setUser(null);
+    setToken(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   };
-  const isAuthenticated = !!user;
+
+  const isAuthenticated = !!token;
   const isAdmin = user?.roles.includes("Admin") ?? false;
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, isAdmin, login, logout }}>
+    <AuthContext.Provider value={{ user, token, isAuthenticated, isAdmin, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
@@ -74,3 +67,4 @@ export function useAuth() {
   }
   return context;
 }
+
