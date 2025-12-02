@@ -1,9 +1,11 @@
+using LagerWebb.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RolesSeed;
 using System.Text;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +52,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 var key = "MySuperUltraSecretJwtKey_2025_ABC123!!";
 
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ChangeLogFilter>();
+});
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -66,6 +73,28 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
         ClockSkew = TimeSpan.Zero
     };
+});
+
+// Rate limiting configuration
+builder.Services.AddRateLimiter(options =>
+{
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+    {
+        // Key = användarens IP
+        var clientIp = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+
+        // Definiera limiter
+        return RateLimitPartition.GetSlidingWindowLimiter(clientIp, _ => new SlidingWindowRateLimiterOptions
+        {
+            PermitLimit = 20,             // max 5 requests
+            Window = TimeSpan.FromMinutes(1),
+            SegmentsPerWindow = 10,      // delar fönstret i mindre segment
+            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+            QueueLimit = 0                // inga requests i kö
+        });
+    });
+
+    options.RejectionStatusCode = 429;
 });
 
 builder.Services.AddAuthorization();
@@ -116,7 +145,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(AllowFrontend);
-
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -3,12 +3,16 @@ import ProductSearch from "../components/parts-components/ProductSearch";
 import type { Product } from "../interfaces";
 import { getAllProducts} from "../services/Parts/parts.api"; 
 import { useAuth } from "../context/AuthContext";
+import styles from "../styles/PartsPage.module.css"
+import { useNavigate } from "react-router-dom";
 
 export default function PartsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { isAuthenticated } = useAuth();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
       if (!isAuthenticated) return;
@@ -37,8 +41,13 @@ export default function PartsPage() {
 
   return (
     <>
+    <div className={styles.componentsContainer}>
       <h1>Reservdelar</h1>
+      <div className={styles.topRow}>
+        <button className={styles.addBtn} onClick={() => navigate("/admin/create-product")}>+</button>
+      </div>
       <ProductSearch products={products} />
+    </div>
     </>
   );
 }

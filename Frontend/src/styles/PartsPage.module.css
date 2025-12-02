@@ -1,10 +1,18 @@
 .componentsContainer {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.topRow {
+  display: flex;
+  justify-content: flex-end;
+
 }
 
 .addBtn {
-  position: absolute;
   border-radius: 8px;
-  top: 1rem;
-  right: 0;
+  padding: 8px 12px;
+  font-size: 20px;
+  cursor: pointer;
 }
