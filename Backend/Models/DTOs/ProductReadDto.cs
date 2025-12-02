@@ -12,5 +12,6 @@ namespace LagerWebb.Models.DTOs
         public string? Location { get; set; }
         public int MinimumStock { get; set; }
         public string? Description { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

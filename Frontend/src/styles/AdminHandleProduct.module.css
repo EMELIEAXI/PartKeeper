@@ -1,0 +1,78 @@
+.productWrapper {
+  width: 100%;
+  overflow-x: auto;      /* Gör hela tabellen scrollbar åt sidan */
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Själva tabellen */
+.tableContent {
+  width: max-content;    /* Viktigt för att kolumnerna ska behålla sin bredd */
+  border-collapse: collapse;
+  min-width: 100%;       /* Fyll upp containern */
+  color: black;
+}
+
+/* Rubriker */
+.tableHead th {
+  background: #eee;
+  text-align: left;
+  padding: 10px;
+  white-space: nowrap;   /* Förhindra att th bryts */
+  border-bottom: 2px solid #ccc;
+}
+
+/* Cell-styling */
+.tbodyContent td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #ddd;
+  vertical-align: top;
+  white-space: nowrap;   /* Gör raderna breda så man behöver scrolla */
+}
+
+/* Rader */
+.tableRow:nth-child(even) {
+  background: #edc99b;
+}
+
+.tableContent tr:hover {
+  background-color: #eee;
+}
+
+.searchInput {
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  font-size: 16px;
+  width: 270px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* Redigera / radera-knappen */
+.editBtn {
+  padding: 6px 10px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.editBtn:hover {
+  background: #1e4db7;
+}
+
+/* Fix: Se till att sista kolumnen syns och inte klipps */
+.tableContent td:last-child,
+.tableContent th:last-child {
+  padding-right: 20px;
+}
+
+@media (max-width: 500px) {
+  .searchInput {
+    text-align: left;
+  }
+  }
+

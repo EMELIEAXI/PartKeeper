@@ -47,6 +47,7 @@ public class PartsService
             Location = dto.Location,
             MinimumStock = dto.MinimumStock,
             Description = dto.Description,
+            CreatedAt = DateTime.Now
         };
 
         _context.Products.Add(part);

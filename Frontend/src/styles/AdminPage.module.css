@@ -3,6 +3,8 @@
   background-color: var(--golden-apricot);
   width: 100%;
   max-width: 400px;
+  margin-top: 3rem;
+  margin-bottom: 7rem;
 }
 
 .adminContainer h1 {
