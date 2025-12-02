@@ -45,7 +45,10 @@ public class PartsController : ControllerBase
             ProductName = p.ProductName,
             ArticleNumber = p.ArticleNumber,
             Quantity = p.Quantity,
-            Description = p.Description
+            Description = p.Description,
+            CategoryId = p.CategoryId,
+            Location = p.Location,
+            MinimumStock = p.MinimumStock
         });
 
         return Ok(result);
@@ -64,7 +67,11 @@ public class PartsController : ControllerBase
             Id = part.ProductId,
             ProductName = part.ProductName,
             ArticleNumber = part.ArticleNumber,
-            Quantity = part.Quantity
+            Quantity = part.Quantity,
+            CategoryId = part.CategoryId,
+            MinimumStock = part.MinimumStock,
+            Location = part.Location,
+            Description = part.Description
         };
 
         return Ok(dto);

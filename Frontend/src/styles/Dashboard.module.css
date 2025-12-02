@@ -1,45 +1,78 @@
 .dashboard-wrapper {
-  margin: 2rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1rem 2rem 4rem 2rem;
+  background-color: #fefefe;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 .dashboard-section {
-  padding: 2rem;
-  margin-bottom: 2rem;
-  border-radius: 1rem;
-  background-color: var(--golden-apricot);
-  color: var(--text-color);
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  padding: 1.5rem;
 }
 
-.dashboard-section h3 {
-  color: red;
+.dashboard-section h3, 
+.dashboard-section h4 {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.list {
+  padding: 0;
+  margin: 0;
 }
 
 .list li {
   list-style: none;
+  margin-bottom: 0.5rem;
 }
 
 .dashboard-section a {
   display: flex;
   justify-content: space-between;
-  list-style: none;
-  padding: 0.5rem;
+  align-items: center;
   text-decoration: none;
-  background-color: rgb(212, 205, 205);
-}
+  padding: 0.7rem 0.9rem;
+  color: #333;
 
-.dashboard-section a:nth-of-type(odd) {
-  background-color: aliceblue;
+  background-color: #f7f7f7;
+  border-radius: 6px;
+
+  transition: background-color 0.15s ease;
 }
 
 .dashboard-section a:nth-of-type(even) {
-  background-color: rgb(208, 212, 215);
+  background-color: #efefef;
 }
 
 .dashboard-section a:hover {
-  background-color: rgb(178, 179, 184);
+  background-color: #e1e7ff;
 }
 
 .warnQty {
-  color: red;
+  color: #c00000;
+  font-weight: bold;
+}
+
+.positiveChange {
+  color: #008a1f;
+  font-weight: 700;
+}
+
+.negativeChange {
+  color: #c00000;
   font-weight: 700;
 }
