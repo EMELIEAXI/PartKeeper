@@ -1,4 +1,8 @@
-﻿[Route("api/[controller]")]
+﻿using LagerWebb.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+[Route("api/[controller]")]
 [ApiController]
 [Authorize]
 public class CategoriesController : ControllerBase

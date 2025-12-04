@@ -24,6 +24,7 @@ export default function EditProductModal({ product, category, onClose, onSaved }
     minimumStock: product.minimumStock ?? 0,
     location: product.location ?? "",
     createdAt: product.createdAt,
+    categoryName: product.categoryName ?? "",
   });
   const [message, setMessage] = useState("");
   const [saving, setSaving] = useState(false);
