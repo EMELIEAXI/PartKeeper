@@ -90,7 +90,7 @@ export default function ProductDetails() {
 
         <div className={styles.productImg}>
           <img
-            src={"/gear-149292_1280.webp"}
+            src={"/gear-wheel-162161_1280.webp"}
             alt="Placeholder bild för produkt"
           />
         
