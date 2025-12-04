@@ -16,13 +16,16 @@
 
 /* Rubriker */
 .tableHead th {
-  background: #eee;
+  background: #eeeeee;
   text-align: left;
   padding: 10px;
   white-space: nowrap;   /* Förhindra att th bryts */
   border-bottom: 2px solid #ccc;
 }
 
+.tbodyContent {
+  background-color: white;
+}
 /* Cell-styling */
 .tbodyContent td {
   padding: 8px 10px;
@@ -33,7 +36,7 @@
 
 /* Rader */
 .tableRow:nth-child(even) {
-  background: #edc99b;
+  background: #e3e2e1;
 }
 
 .tableContent tr:hover {

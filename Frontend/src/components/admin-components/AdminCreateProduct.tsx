@@ -1,7 +1,9 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styles from "../../styles/AdminCreateUser.module.css"
 import type { CreateProductRequest } from "../../interfaces/CreateProductRequest"
 import { createProduct } from "../../services/Parts/parts.api";
+import type { Category } from "../../interfaces";
+import { getCategories } from "../../services/Parts/parts.api";
 
 
 export default function AdminCreateProduct() {
@@ -18,6 +20,20 @@ export default function AdminCreateProduct() {
 
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [category, setCategory] = useState<Category[] | null>(null);
+
+  useEffect(() => {
+    async function loadCategories() {
+      try {
+        const data = await getCategories();
+        setCategory(data);
+      } catch (err) {
+        console.error("Kunde inte hämta kategorier:", err);
+      }
+    }
+
+    loadCategories();
+  }, []);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, type } = e.target;
@@ -135,15 +151,24 @@ export default function AdminCreateProduct() {
         </div>
 
         <div className={styles.formColumn}>
-          <label htmlFor="categoryId">Kategori: </label>
-          <input 
-          type="number"
-          id="categoryId"
-          name="categoryId"
-          placeholder="Kategori nummer..."
-          value={formData?.categoryId}
-          onChange={handleChange}
-          />
+          <label htmlFor="distributorSelect">Leverantör: </label>
+          <select 
+          name="distributorSelect" 
+          id="distributorSelect"
+          value={formData.categoryId}
+          onChange={e => setFormData(prev => ({
+            ...prev,
+            categoryId: Number(e.target.value)
+          }))}
+          >
+            <option value="">Välj leverantör...</option>
+
+            {category?.map(cat => (
+              <option key={cat.categoryId} value={cat.categoryId}>
+                {cat.categoryName}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className={styles.formColumn}>
