@@ -3,7 +3,6 @@
 Detta dokument beskriver hur man startar hela utvecklingsmiljön för projektet: 
 databas, backend och frontend. Följ dessa steg för att få allt att fungera lokalt.
 
-**-----------**
 
 ## 1. Förutsättningar
 Installera följande:
