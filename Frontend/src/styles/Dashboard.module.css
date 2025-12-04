@@ -1,9 +1,7 @@
 .dashboard-wrapper {
   width: 100%;
-  margin: 1rem auto;
   padding: 1rem;
   background-color: #fefefe;
-  border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   font-family: Arial, sans-serif;
   color: #333;
@@ -75,11 +73,18 @@
   color: #c00000;
   font-weight: 700;
 }
-
+@media (min-width: 27rem) {
+  .dashboard-wrapper {
+   border-radius: 12px;
+  margin: 1rem auto;
+    
+  }
+}
 /* ---Tablet - 768px--- */
 @media (min-width: 48rem) {
   .dashboard-wrapper {
     padding: 1.5rem;
+    
   }
 
   .grid {

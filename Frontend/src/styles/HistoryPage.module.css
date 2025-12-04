@@ -1,9 +1,9 @@
 .wrapper {
     width: 100%;
-    margin: 1rem auto;
+    /* margin: 1rem auto; */
     padding: 1rem;
     background: #ffffff;
-    border-radius: 12px;
+    /* border-radius: 12px; */
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     font-family: Arial, sans-serif;
     color: #333;
@@ -112,6 +112,8 @@ select, input[type="date"] {
     font-weight: 600;
 }
 
+
+
 /* --- TABLET (768px – 1024px) --- */
 @media (min-width: 47.99rem) and (max-width: 64.99rem) {
 
@@ -163,6 +165,8 @@ select, input[type="date"] {
 @media (min-width: 65rem) {
     .wrapper {
         max-width: 1100px;
+         margin: 1rem auto;
+    border-radius: 12px;
     }
 
     .filterBox {
