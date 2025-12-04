@@ -29,6 +29,7 @@ export default function ProductDetails() {
     async function load() {
       try {
         const data = await getProductDetails(productId);
+         console.log("Produktdata från API:", data);  // ← KOLLA HÄR
         setProduct(data);
         setLocalQuantity(data.quantity);
       } catch {
@@ -80,10 +81,12 @@ export default function ProductDetails() {
     <div>
       <div className={styles.productWrapper}>
         <h1>{product.productName}</h1>
-
-        { isAdmin && (
-        <button className={styles.updateBtn} onClick={() => navigate("/admin/handle-product")}>redigera</button>
-      )}
+        <div className={styles.actionButtons}>
+          <button className={styles.addBtn} onClick={() => navigate(-1)}>&larr; Tillbaka</button>
+          { isAdmin && (
+          <button className={styles.addBtn} onClick={() => navigate("/admin/handle-product")}>Redigera</button>
+          )}
+         </div>
 
         <div className={styles.productImg}>
           <img
@@ -162,6 +165,10 @@ export default function ProductDetails() {
               <th>Artikelnummer:</th>
               <td>{product.articleNumber}</td>
             </tr>
+              <tr>
+              <th>Leverantör:</th>
+              <td>{product.categoryName}</td>
+            </tr>
             <tr>
               <th>Beskrivning:</th>
               <td>{product.description}</td>
@@ -173,10 +180,6 @@ export default function ProductDetails() {
             <tr>
               <th>Hyllplats:</th>
               <td>{product.location}</td>
-            </tr>
-            <tr>
-              <th>Kategori:</th>
-              <td>{product.categoryId}</td>
             </tr>
             <tr>
               <th>Minimilager:</th>
