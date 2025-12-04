@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import type { Category, Product } from "../../interfaces";
@@ -24,6 +24,8 @@ export default function ProductDetails() {
   const [success, setSuccess] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getCategories().then(setCategories);
@@ -91,8 +93,8 @@ export default function ProductDetails() {
         <div className={styles.actionButtons}>
           <button className={styles.addBtn} onClick={() => navigate(-1)}>&larr; Tillbaka</button>
           { isAdmin && (
-        <button className={styles.updateBtn} onClick={() => setShowEditModal(true)}>redigera</button>
-        )}
+            <button className={styles.addBtn} onClick={() => setShowEditModal(true)}>redigera</button>
+          )}
          </div>
 
         <div className={styles.productImg}>
