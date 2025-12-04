@@ -1,54 +1,160 @@
-.contentWrapper {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 100px;
-}
-
-
-.inputbox {
-  padding: 1rem;
-  margin: 1rem 0;
-  border-radius: 2rem;
-  max-width: 400px;
+/* Wrapper i samma stil som dashboarden */
+.dashboard-wrapper {
   width: 100%;
+  margin: 1rem auto;
+  padding: 1rem;
+  background-color: #fefefe;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  font-family: Arial, sans-serif;
+  color: #333;
+  text-align: center;
+   padding: 1.5rem;
+    min-height: 100vh;
+    border-radius: 0;
+    margin: 0;
 }
+
+/* Sektion liknande dashboard-section */
+.dashboardSection {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Sökfält */
+.inputbox {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+}
+
+/* Tabell */
 .table {
   width: 100%;
   border-collapse: collapse;
-}
-.table a {
-  text-decoration: none;
-  color: inherit;
-}
-.table th, .table td {
-  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  font-size: 0.95rem;
   text-align: left;
-  border-bottom: 1px solid #e0e0e0;
 }
 
 .table th {
   cursor: pointer;
-  background: #eee;
-  color: black;
-  padding: 8px;
-  border-bottom: 2px solid #ccc;
+  padding: 0.8rem;
+  background: #f3f3f3;
+  border-bottom: 2px solid #ddd;
+  font-weight: 600;
+  user-select: none;
 }
 
-
 .table td {
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
-  color: black;
+  padding: 0.8rem;
+  border-bottom: 1px solid #eee;
 }
 
 .table tr:hover {
-  background-color: #f1f7ff;
+  background-color: #e1e7ff;
 }
 
+/* Pagination */
 .pagination {
-  margin-top: 20px;
+  margin-top: 1.5rem;
   display: flex;
-  gap: 20px;
+  justify-content: center;
   align-items: center;
-  color: black;
+  gap: 1rem;
+}
+
+.pagination button, .addBtn {
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f7f7f7;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #e1e7ff;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* Responsiv anpassning */
+@media (min-width: 48rem) {
+  .dashboard-wrapper {
+  max-width: 100%;
+  border-radius: 12px;
+  min-height: auto;
+  }
+}
+
+@media (min-width: 64rem) {
+  .dashboard-wrapper {
+    max-width: 1100px;
+    padding: 2rem 2rem 3rem 2rem;
+  }
+}
+
+@media (min-width: 75rem) {
+
+  .dashboardSection {
+    padding: 20px;
+  }
+}
+
+/* Dölj element på desktop */
+.desktopOnly {
+  display: none;
+}
+
+/* Visa element endast på mobil */
+.mobileOnly {
+  display: table-cell;
+}
+
+/* Select i mittenkolumnen */
+.mobileSelect {
+  width: 100%;
+  padding: 0.4rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+/* Rader ska vara klickbara */
+.rowClickable {
+  cursor: pointer;
+}
+
+.rowClickable:hover {
+  background-color: #e1e7ff;
+}
+
+/* === Desktop-läge === */
+@media (min-width: 768px) {
+  .desktopOnly {
+    display: table-cell;
+  }
+
+  .mobileOnly {
+    display: none;
+  }
 }
