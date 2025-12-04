@@ -117,15 +117,15 @@ Tester uförs via frontend och Swagger.
 **Steg:**
 - Kör POST `/api/Parts`
 
-**Exempeldata:**
-{
-  "productName": "Exempel",
-  "articleNumber": "12345",
-  "quantity": 10,
-  "categoryId": 1,
-  "location": "A5",
-  "minimumStock": 5,
-  "description": "Exempeldata" 
+**Exempeldata:** \
+{ \
+  "productName": "Exempel", \
+  "articleNumber": "12345", \
+  "quantity": 10, \
+  "categoryId": 1, \
+  "location": "A5", \
+  "minimumStock": 5, \
+  "description": "Exempeldata" \
 }
 
 **Förväntat resultat:**
@@ -170,12 +170,12 @@ Tester uförs via frontend och Swagger.
 **Steg:**
 - Kör POST `/api/Transactions`
 
-**Exempeldata:**
-{
-  "productId": 3,
-  "quantityChange": 15,
-  "transactionType": "Add",
-  "comment": "Exempel"
+**Exempeldata:** \
+{ \
+  "productId": 3, \
+  "quantityChange": 15, \
+  "transactionType": "Add", \
+  "comment": "Exempel" \
 }
 
 **Förväntat resultat:**
