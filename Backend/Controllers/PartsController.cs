@@ -63,6 +63,7 @@ public class PartsController : ControllerBase
             Quantity = p.Quantity,
             Description = p.Description,
             CategoryId = p.CategoryId,
+            CategoryName = p.Category?.CategoryName ?? "",
             MinimumStock = p.MinimumStock,
             Location = p.Location,
             CreatedAt = p.CreatedAt
@@ -86,6 +87,7 @@ public class PartsController : ControllerBase
             ArticleNumber = part.ArticleNumber,
             Quantity = part.Quantity,
             CategoryId = part.CategoryId,
+            CategoryName = part.Category?.CategoryName ?? "",  // ← FIXEN
             MinimumStock = part.MinimumStock,
             Location = part.Location,
             CreatedAt = part.CreatedAt,

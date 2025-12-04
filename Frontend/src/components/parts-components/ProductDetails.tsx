@@ -36,6 +36,7 @@ export default function ProductDetails() {
     async function load() {
       try {
         const data = await getProductDetails(productId);
+         console.log("Produktdata från API:", data);  // ← KOLLA HÄR
         setProduct(data);
         setLocalQuantity(data.quantity);
       } catch {
@@ -87,20 +88,19 @@ export default function ProductDetails() {
     <div>
       <div className={styles.productWrapper}>
         <h1>{product.productName}</h1>
-
-        {/* { isAdmin && (
-        <button className={styles.updateBtn} onClick={() => navigate(`/admin/handle-product/${product.id}`)}>redigera</button>
-      )} */}
-
-        { isAdmin && (
+        <div className={styles.actionButtons}>
+          <button className={styles.addBtn} onClick={() => navigate(-1)}>&larr; Tillbaka</button>
+          { isAdmin && (
         <button className={styles.updateBtn} onClick={() => setShowEditModal(true)}>redigera</button>
-      )}
+        )}
+         </div>
 
         <div className={styles.productImg}>
           <img
-            src="https://cdn.pixabay.com/photo/2023/11/15/15/54/ai-generated-8390398_1280.jpg"
-            alt="Produktbild"
+            src={"/gear-wheel-162161_1280.webp"}
+            alt="Placeholder bild för produkt"
           />
+        
         </div>
 
         <div className={styles.plusMinusBtn}>
@@ -173,6 +173,10 @@ export default function ProductDetails() {
               <th>Artikelnummer:</th>
               <td>{product.articleNumber}</td>
             </tr>
+              <tr>
+              <th>Leverantör:</th>
+              <td>{product.categoryName}</td>
+            </tr>
             <tr>
               <th>Beskrivning:</th>
               <td>{product.description}</td>
@@ -184,10 +188,6 @@ export default function ProductDetails() {
             <tr>
               <th>Hyllplats:</th>
               <td>{product.location}</td>
-            </tr>
-            <tr>
-              <th>Kategori:</th>
-              <td>{product.categoryId}</td>
             </tr>
             <tr>
               <th>Minimilager:</th>

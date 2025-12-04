@@ -3,11 +3,11 @@
 Detta examensarbete går ut på att utveckla ett lagerhanteringssystem som möjliggör
 administration av reservdelar, lagersaldon, transaktioner och användare.
 
-## Syfte
+## :large_blue_diamond:Syfte
 Att skapa ett modernt och användarvänligt lagerhanteringssystem som 
 demonstrerar god kodstruktur, testbar arkitektur och tydlig dokumentation.
 
-## Tekniker
+## :large_blue_diamond:Tekniker
 ### Frontend
 - React
 - Vite
@@ -25,34 +25,31 @@ demonstrerar god kodstruktur, testbar arkitektur och tydlig dokumentation.
 - Microsoft SQL Server
 - Entity Framework migrations
 
-## Arbetsprocess
+## :large_blue_diamond:Arbetsprocess
 - Scrum (3 veckor)
 - Jira för planering
 - GitHub för versionshantering
 - Branch-strategi: main, feature-branches
 
 
-**----------------------------------------------------**
-
-
-## Projektstruktur
+## :large_blue_diamond:Projektstruktur
 ### Frontend
 
-- /src
--- /components
---- /admin-components
---- /parts-components
--- /context
--- /interfaces
--- /mock
--- /pages
--- /routes
--- /services
---- /Authentication
---- /Parts
--- /styles
-- main.tsx
-- App.tsx
+-- /src \
+--- /components \
+---- /admin-components \
+---- /parts-components \
+--- /context \
+--- /interfaces \
+--- /mock \
+--- /pages \
+--- /routes \
+--- /services \
+---- /Authentication \
+---- /Parts \
+--- /styles \
+-- main.tsx \
+-- App.tsx
 
 ### Backend
 
@@ -64,7 +61,7 @@ demonstrerar god kodstruktur, testbar arkitektur och tydlig dokumentation.
 -- /DTOs
 - /Services
 
-## Mål med projektet
+## :large_blue_diamond:Mål med projektet
 - Implementera ett fungerande lagerhanteringssystem
 - Säker autentisering
 - Tydlig dokumentation
