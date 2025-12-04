@@ -87,6 +87,8 @@ import AdminCreateCategory from './components/admin-components/AdminCreateCatego
 
         <Route path="handle-product" element={<AdminHandleProduct />} />
 
+        <Route path="handle-product/:id" element={<AdminHandleProduct />} />
+
         <Route path="handle-distributor" element={<AdminCreateCategory />} />
         
       </Route>
