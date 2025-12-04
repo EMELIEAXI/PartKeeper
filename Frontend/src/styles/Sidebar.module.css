@@ -38,6 +38,10 @@
   border-radius: 8px;
 }
 
+.userName {
+  font-size: large;
+}
+
 .sidebar a {
   text-decoration: none;
   color: var(--link-color);

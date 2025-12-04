@@ -3,7 +3,6 @@ import type { Product, Category } from "../../interfaces"
 import { useEffect, useState } from "react";
 import { getAllProducts, getCategories } from "../../services/Parts/parts.api";
 import EditProductModal from "./EditProductModal";
-import { useNavigate } from "react-router-dom";
 
 
 export default function AdminHandleProduct() {
@@ -14,7 +13,6 @@ export default function AdminHandleProduct() {
   const [sortConfig, setSortConfig] = useState<{ key: keyof Product; direction: "asc" | "desc" } | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   
-  const navigate = useNavigate();
 
   const fetchAll = async () => {
     try {
@@ -137,7 +135,7 @@ const sortArrow = (key: keyof Product) => {
 
         <tbody className={styles.tbodyContent}>
           {sortedProducts.map((p) => (
-            <tr key={p.id} onClick={() => navigate(`/parts/${p.id}`)} className={styles.tableRow}>
+            <tr key={p.id} onClick={() => setSelectedProduct(p)} className={styles.tableRow}>
               <td>{p.productName}</td>
               <td>{p.articleNumber}</td>
               <td>{p.description}</td>

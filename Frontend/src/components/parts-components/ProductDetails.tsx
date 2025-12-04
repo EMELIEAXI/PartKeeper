@@ -1,12 +1,13 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import type { Product } from "../../interfaces";
+import type { Category, Product } from "../../interfaces";
 import styles from "../../styles/ProductDetails.module.css";
-// import { Plus, Minus } from "lucide-react";
 import { getProductDetails } from "../../services/Parts/parts.api";
 import { createTransaction } from "../../services/TransactionsApi";
 import type { CreateTransactionPayload } from "../../services/TransactionsApi";
+import EditProductModal from "../admin-components/EditProductModal";
+import { getCategories } from "../../services/Parts/parts.api";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -21,7 +22,13 @@ export default function ProductDetails() {
   const [comment, setComment] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const navigate = useNavigate();
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    getCategories().then(setCategories);
+  }, []);
+
 
   useEffect(() => {
     if (productId === null || isNaN(productId)) return;
@@ -84,8 +91,8 @@ export default function ProductDetails() {
         <div className={styles.actionButtons}>
           <button className={styles.addBtn} onClick={() => navigate(-1)}>&larr; Tillbaka</button>
           { isAdmin && (
-          <button className={styles.addBtn} onClick={() => navigate("/admin/handle-product")}>Redigera</button>
-          )}
+        <button className={styles.updateBtn} onClick={() => setShowEditModal(true)}>redigera</button>
+        )}
          </div>
 
         <div className={styles.productImg}>
@@ -189,6 +196,18 @@ export default function ProductDetails() {
           </tbody>
         </table>
       </div>
+
+      {showEditModal && (
+        <EditProductModal
+          product={product}
+          category={categories}
+          onClose={() => setShowEditModal(false)}
+          onSaved={() => {
+            setShowEditModal(false);
+            getProductDetails(productId).then(setProduct);
+          }}
+        />
+      )}
     </div>
   );
 }

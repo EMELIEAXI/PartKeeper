@@ -17,7 +17,7 @@ export default function ProductSearch() {
   const [totalPages, setTotalPages] = useState(1);
   
   const navigate = useNavigate();
-  const pageSize = 20; // 20 per sida
+  const pageSize = 10; // 20 per sida
 
   const fetchProducts = async () => {
     const url = new URL("https://localhost:7089/api/Parts");

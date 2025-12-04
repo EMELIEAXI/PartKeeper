@@ -21,6 +21,7 @@ export default function EditProductModal({ product, category, onClose, onSaved }
     description: product.description ?? "",
     quantity: product.quantity ?? 0,
     categoryId: product.categoryId,
+    categoryName: product.categoryName ?? "",
     minimumStock: product.minimumStock ?? 0,
     location: product.location ?? "",
     createdAt: product.createdAt,
@@ -150,7 +151,7 @@ export default function EditProductModal({ product, category, onClose, onSaved }
         <div className={styles.buttons}>
           <button onClick={handleSave} className={styles.saveBtn} disabled={saving}>Spara</button>
           <button onClick={handleDelete} className={styles.deleteBtn}>Radera</button>
-          <button onClick={onClose}>Stäng</button>
+          <button onClick={onClose} className={styles.closeBtn}>Stäng</button>
         </div>
 
         {message && <p>{message}</p>}
