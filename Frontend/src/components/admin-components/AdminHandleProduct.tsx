@@ -3,6 +3,7 @@ import type { Product, Category } from "../../interfaces"
 import { useEffect, useState } from "react";
 import { getAllProducts, getCategories } from "../../services/Parts/parts.api";
 import EditProductModal from "./EditProductModal";
+import { useNavigate } from "react-router-dom";
 
 
 export default function AdminHandleProduct() {
@@ -12,6 +13,8 @@ export default function AdminHandleProduct() {
   const [loading, setLoading] = useState(true);
   const [sortConfig, setSortConfig] = useState<{ key: keyof Product; direction: "asc" | "desc" } | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  
+  const navigate = useNavigate();
 
   const fetchAll = async () => {
     try {
@@ -34,6 +37,12 @@ export default function AdminHandleProduct() {
 
   if (loading) return <p>Laddar produkter...</p>
 
+  function getCategoryName(id: number) {
+    if (!categories) return "";
+    const cat = categories.find(c => c.categoryId === id);
+    return cat ? cat.categoryName : "Leverantör saknas";
+  }
+  
   
   // Filtrera produkter - sökrutan och i th
   const filteredProducts = products.filter((p) => {
@@ -55,6 +64,17 @@ export default function AdminHandleProduct() {
   
     let A = a[key];
     let B = b[key];
+
+    if (key === "categoryName") {
+      A = getCategoryName(a.categoryId);
+      B = getCategoryName(b.categoryId);
+      return direction === "asc"
+        ? A.localeCompare(B)
+        : B.localeCompare(A);
+    }
+  
+    A = a[key];
+    B = b[key];
   
     if (key === "createdAt") {
       A = A ? new Date(A).getTime() : 0;
@@ -73,7 +93,7 @@ export default function AdminHandleProduct() {
   });
   
 
-const requestSort = (key: keyof Product) => {
+const requestSort = (key: keyof Product | "categoryName") => {
   setSortConfig(prev =>
     prev?.key === key && prev.direction === "asc"
       ? { key, direction: "desc" }
@@ -107,7 +127,7 @@ const sortArrow = (key: keyof Product) => {
           <th onClick={() => requestSort("articleNumber")}>Artnummer{sortArrow("articleNumber")}</th>
           <th onClick={() => requestSort("description")}>Beskrivning{sortArrow("description")}</th>
           <th onClick={() => requestSort("quantity")}>Antal{sortArrow("quantity")}</th>
-          <th onClick={() => requestSort("categoryId")}>Leverantör{sortArrow("categoryId")}</th>
+          <th onClick={() => requestSort("categoryName")}>Leverantör{sortArrow("categoryName")}</th>
           <th onClick={() => requestSort("minimumStock")}>Minilager{sortArrow("minimumStock")}</th>
           <th onClick={() => requestSort("location")}>Plats{sortArrow("location")}</th>
           <th onClick={() => requestSort("createdAt")}>Skapad{sortArrow("createdAt")}</th>
@@ -117,12 +137,12 @@ const sortArrow = (key: keyof Product) => {
 
         <tbody className={styles.tbodyContent}>
           {sortedProducts.map((p) => (
-            <tr key={p.id} className={styles.tableRow}>
+            <tr key={p.id} onClick={() => navigate(`/parts/${p.id}`)} className={styles.tableRow}>
               <td>{p.productName}</td>
               <td>{p.articleNumber}</td>
               <td>{p.description}</td>
               <td>{p.quantity}</td>
-              <td>{p.categoryId}</td>
+              <td>{getCategoryName(p.categoryId)}</td>
               <td>{p.minimumStock}</td>
               <td>{p.location}</td>
               <td>{p.createdAt ? new Date(p.createdAt).toLocaleDateString("sv-SE") : "–"}</td>

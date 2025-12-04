@@ -16,9 +16,9 @@ import ProductDetails from './components/parts-components/ProductDetails';
 import AdminLayout from './components/admin-components/AdminLayout';
 import AdminCreateUser from './components/admin-components/AdminCreateUser';
 import AdminHandleUser from './components/admin-components/AdminHandleUser';
-import mockUsers from './mock/users';
 import AdminCreateProduct from './components/admin-components/AdminCreateProduct';
 import AdminHandleProduct from './components/admin-components/AdminHandleProduct';
+import AdminCreateCategory from './components/admin-components/AdminCreateCategory';
 
  function App() {
   const { isAuthenticated } = useAuth();
@@ -81,11 +81,13 @@ import AdminHandleProduct from './components/admin-components/AdminHandleProduct
 
         <Route path="create-user" element={<AdminCreateUser />} />
 
-        <Route path="handle-user" element={<AdminHandleUser users={mockUsers}/>} />
+        <Route path="handle-user" element={<AdminHandleUser/>} />
 
         <Route path="create-product" element={<AdminCreateProduct />} />
 
         <Route path="handle-product" element={<AdminHandleProduct />} />
+
+        <Route path="handle-distributor" element={<AdminCreateCategory />} />
         
       </Route>
 

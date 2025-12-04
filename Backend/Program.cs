@@ -80,7 +80,7 @@ builder.Services.AddRateLimiter(options =>
 {
     options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
     {
-        // Key = användarens IP
+        // Key = anvï¿½ndarens IP
         var clientIp = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
 
         // Definiera limiter
@@ -88,9 +88,9 @@ builder.Services.AddRateLimiter(options =>
         {
             PermitLimit = 100,          
             Window = TimeSpan.FromMinutes(1),
-            SegmentsPerWindow = 10,      // delar fönstret i mindre segment
+            SegmentsPerWindow = 10,      // delar fï¿½nstret i mindre segment
             QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-            QueueLimit = 20                // 20 requests i kö
+            QueueLimit = 20                // 20 requests i kï¿½
         });
     });
 
@@ -101,6 +101,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<PartsService>();
 builder.Services.AddScoped<TransactionService>();
+builder.Services.AddScoped<CategoryService>();
 builder.Services.AddHttpContextAccessor();
 
 var AllowFrontend = "_allowFrontend";

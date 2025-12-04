@@ -12,9 +12,8 @@ export default function AdminPage() {
         <h3>Produkter</h3>
         <li><Link className={styles.linkMenu} to="/admin/create-product">Skapa ny produkt ➜</Link></li>
         <li><Link className={styles.linkMenu} to="/admin/handle-product">Hantera produkter ➜</Link></li>
-        <h3>Nånting mer?</h3>
-        <li><Link className={styles.linkMenu} to="/admin/create-user">Skapa ny användare ➜</Link></li>
-        <li><Link className={styles.linkMenu} to="/admin/create-user">Skapa ny användare ➜</Link></li>
+        <h3>Leverantörer</h3>
+        <li><Link className={styles.linkMenu} to="/admin/handle-distributor">Lägg till och hantera leverantörer ➜</Link></li>
       </ul>
     </>
   );
