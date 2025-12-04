@@ -90,9 +90,10 @@ export default function ProductDetails() {
 
         <div className={styles.productImg}>
           <img
-            src="https://cdn.pixabay.com/photo/2023/11/15/15/54/ai-generated-8390398_1280.jpg"
-            alt="Produktbild"
+            src={"/gear-149292_1280.webp"}
+            alt="Placeholder bild för produkt"
           />
+        
         </div>
 
         <div className={styles.plusMinusBtn}>
