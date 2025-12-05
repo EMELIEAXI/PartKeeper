@@ -48,10 +48,10 @@ export default function AdminHandleProduct() {
   
     return (
       p.productName.toLowerCase().includes(q) ||
-      p.articleNumber.toLowerCase().includes(q) ||
-      (p.description?.toLowerCase() ?? "").includes(q) ||
-      (p.location?.toLowerCase() ?? "").includes(q) ||
-      String(p.categoryId).includes(q)
+      p.articleNumber.toLowerCase().includes(q)
+      // (p.description?.toLowerCase() ?? "").includes(q) ||
+      // (p.location?.toLowerCase() ?? "").includes(q) ||
+      // String(p.categoryId).includes(q)
     );
   });
   
@@ -108,55 +108,48 @@ const sortArrow = (key: keyof Product) => {
   
   return (
     <div className={styles.productWrapper}>
-      <h1>Hantera produkter</h1>
+      <h2>Hantera produkter</h2>
 
-      <input 
-      type="text" 
-      placeholder="Sök produkt..."
-      className={styles.searchInput} 
-      value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
-      />
+      <div className={styles.searchWrapper}>
+        <h5>Sök produkt:</h5>
+        <input 
+        type="text" 
+        placeholder="Sök på namn eller artikelnr..."
+        className={styles.searchInput} 
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
       
-      <table className={styles.tableContent}>
-      <thead className={styles.tableHead}>
-        <tr>
-          <th onClick={() => requestSort("productName")}>Namn{sortArrow("productName")}</th>
-          <th onClick={() => requestSort("articleNumber")}>Artnummer{sortArrow("articleNumber")}</th>
-          <th onClick={() => requestSort("description")}>Beskrivning{sortArrow("description")}</th>
-          <th onClick={() => requestSort("quantity")}>Antal{sortArrow("quantity")}</th>
-          <th onClick={() => requestSort("categoryName")}>Leverantör{sortArrow("categoryName")}</th>
-          <th onClick={() => requestSort("minimumStock")}>Minilager{sortArrow("minimumStock")}</th>
-          <th onClick={() => requestSort("location")}>Plats{sortArrow("location")}</th>
-          <th onClick={() => requestSort("createdAt")}>Skapad{sortArrow("createdAt")}</th>
-        </tr>
-      </thead>
-
-
-        <tbody className={styles.tbodyContent}>
-          {sortedProducts.map((p) => (
-            <tr key={p.id} onClick={() => setSelectedProduct(p)} className={styles.tableRow}>
-              <td>{p.productName}</td>
-              <td>{p.articleNumber}</td>
-              <td>{p.description}</td>
-              <td>{p.quantity}</td>
-              <td>{getCategoryName(p.categoryId)}</td>
-              <td>{p.minimumStock}</td>
-              <td>{p.location}</td>
-              <td>{p.createdAt ? new Date(p.createdAt).toLocaleDateString("sv-SE") : "–"}</td>
-
-              <td>
-                <button
-                className={styles.editBtn}
-                onClick={() => setSelectedProduct(p)}
-                >
-                  Redigera / radera
-                </button>
-              </td>
+      <div className={styles.tableWrapper}>
+        <table className={styles.tableContent}>
+          <thead className={styles.tableHead}>
+            <tr>
+              <th onClick={() => requestSort("productName")}>Namn{sortArrow("productName")}</th>
+              <th onClick={() => requestSort("articleNumber")}>Artnr{sortArrow("articleNumber")}</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+
+          <tbody className={styles.tbodyContent}>
+            {sortedProducts.map((p) => (
+              <tr key={p.id} onClick={() => setSelectedProduct(p)} className={styles.tableRow}>
+                <td>{p.productName}</td>
+                <td>{p.articleNumber}</td>
+                <td>
+                  <button
+                  className={styles.editBtn}
+                  onClick={() => setSelectedProduct(p)}
+                  >
+                    Hantera
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div> 
 
       {/* Popup modal om produkt är vald */}
       {selectedProduct && categories && (

@@ -65,7 +65,7 @@ const reloadUsers = async () => {
 
   return (
     <div className={styles.container}>
-      {/* <h2 className={styles.title}>Användaradministration</h2> */}
+      <h2>Hantera användare</h2>
 
       <div className={styles.userList}>
         <input 

@@ -129,7 +129,7 @@ export default function AdminCreateCategory() {
             </button>
           </div>
 
-          {topMessage && <p>{topMessage}</p>}
+          {topMessage && <p className={styles.message}>{topMessage}</p>}
         </fieldset>
       </form>
 
@@ -137,14 +137,12 @@ export default function AdminCreateCategory() {
       <div className={styles.formWrapper}>
         <h3>Befintliga leverantörer</h3>
         <div className={styles.adminTableHeader}>
-          <div>ID</div>
           <div>Namn</div>
           <div>Åtgärder</div>
         </div>
 
         {categories.map(cat => (
           <div key={cat.categoryId} className={styles.adminTableRow}>
-            <div>{cat.categoryId}</div>
             <div>{cat.categoryName}</div>
             <div className={styles.crudBtns}>
               <button className={styles.editBtn} onClick={() => startEdit(cat)}>Ändra</button>

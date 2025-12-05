@@ -16,7 +16,7 @@
   cursor: pointer;
   transition: background-color 0.15s ease;
   width: max-content;
-  color: var(--text-color)
+  color: black;
 }
 .actionButtons {
   display: flex;

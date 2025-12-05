@@ -13,6 +13,19 @@
   margin-bottom: 3rem;
 }
 
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
 .adminFieldset {
   margin: 0;
   padding: 0;
@@ -122,15 +135,17 @@
 
 .modalContent button {
   margin-right: 8px;
-  border: 1px solid black;
 }
 
-.saveBtn:hover {
-  color: green;
-  border-color: green;
+.saveBtn {
+  background-color: white;
 }
 
-.cancleBtn:hover {
-  color: red;
-  border-color: red;
+.cancleBtn {
+  background-color: white;
+}
+
+.message {
+  text-align: center;
+  margin-top: 1rem;
 }
