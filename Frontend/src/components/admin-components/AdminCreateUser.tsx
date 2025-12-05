@@ -65,12 +65,14 @@ export default function AdminCreateUser() {
     <div className="background-wrapper">
 
       <form className={styles.formWrapper} onSubmit={handleSubmit}>
+        
         <h2>Registrera nytt konto</h2>
         
         <fieldset className={styles.adminFieldset}>
+        <legend className={styles.srOnly}>Användarinformation</legend>
 
           <div className={styles.formColumn}>
-            <label htmlFor="email">Mailadress: </label>
+            <label htmlFor="email">Email: </label>
             <input 
             type="email"
             id="email"
@@ -78,11 +80,12 @@ export default function AdminCreateUser() {
             placeholder="exempel@hotmail.com"
             value={formData.email}
             onChange={handleChange}
+            autoComplete="email"
             required />
           </div>
 
           <div className={styles.formColumn}>
-            <label htmlFor="firstNamn">Förnamn: </label>
+            <label htmlFor="firstName">Förnamn: </label>
             <input 
             type="text"
             id="firstName"
@@ -90,6 +93,7 @@ export default function AdminCreateUser() {
             placeholder="Sara..."
             value={formData.firstName}
             onChange={handleChange}
+            autoComplete="given-name"
             required />
           </div>
 
@@ -97,10 +101,12 @@ export default function AdminCreateUser() {
             <label htmlFor="lastName">Efternamn: </label>
             <input 
             type="text"
+            id="lastName"
             name="lastName"
             placeholder="Karlsson..."
             value={formData.lastName}
             onChange={handleChange}
+            autoComplete="family-name"
             required />
           </div>
 
@@ -108,44 +114,47 @@ export default function AdminCreateUser() {
             <label htmlFor="password">Lösenord: </label>
             <input 
             type="password"
+            id="password"
             name="password"
             placeholder="lösenord..."
             value={formData.password}
             onChange={handleChange}
+            autoComplete="new-password"
             required />
           </div>
 
           <div className={styles.formColumn}>
             <label htmlFor="phoneNumber">Telefonnummer: </label>
             <input 
-            type="text"
-            id="phone"
+            type="tel"
+            id="phoneNumber"
             name="phoneNumber"
             placeholder="07* *** ** **"
             value={formData.phoneNumber}
             onChange={handleChange}
+            autoComplete="tel"
             />
           </div>
 
           <div className={styles.formColumn}>
-            <label>Användarroll </label>
+            <label>Användarroll: </label>
 
-            <label htmlFor="user"> 
-            <input 
-            type="radio"
-            id="user"
-            name="role"
-            value="user"
-            checked={formData.role === "user"}
-            onChange={handleChange}
-            />
-            Användare
-            </label>
-
-            <label htmlFor="admin">
+            <label htmlFor="role-user"> 
               <input 
               type="radio"
-              id="admin"
+              id="role-user"
+              name="role"
+              value="user"
+              checked={formData.role === "user"}
+              onChange={handleChange}
+              />
+              Användare
+            </label>
+
+            <label htmlFor="role-admin">
+              <input 
+              type="radio"
+              id="role-admin"
               name="role"
               value="admin"
               checked={formData.role === "admin"}
@@ -164,7 +173,6 @@ export default function AdminCreateUser() {
           {message && <p>{message}</p>}
 
         </fieldset>
-
       </form>
     </div>
   );
