@@ -1,4 +1,4 @@
-import React from "react";
+
 import type { Product } from "../interfaces";
 import { getToken } from "../services/Authentication/auth.api";
 
