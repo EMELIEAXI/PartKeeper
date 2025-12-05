@@ -76,7 +76,7 @@ export default function StatsPanel() {
 
   return (
     <section className={styles["dashboard-section"]}>
-      <h4>Statistik</h4>
+      <h3>Statistik</h3>
       <ul className={styles.list}>
         <li>Totalt antal produkter: {stats?.totalProducts}</li>
         <li>Kategorier: {stats?.categories}</li>

@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import type { Category, Product } from "../../interfaces";
 import styles from "../../styles/ProductDetails.module.css";
+import "../../global.css";
+// import { Plus, Minus } from "lucide-react";
 import { getProductDetails } from "../../services/Parts/parts.api";
 import { createTransaction } from "../../services/TransactionsApi";
 import type { CreateTransactionPayload } from "../../services/TransactionsApi";
