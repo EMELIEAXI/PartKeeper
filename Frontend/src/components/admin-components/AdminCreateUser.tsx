@@ -116,7 +116,7 @@ export default function AdminCreateUser() {
             type="password"
             id="password"
             name="password"
-            placeholder="lösenord..."
+            placeholder="Minst 6 tecken vara ett icke alfabetiskt..."
             value={formData.password}
             onChange={handleChange}
             autoComplete="new-password"

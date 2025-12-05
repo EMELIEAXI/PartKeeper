@@ -1,6 +1,7 @@
 
 import type { Product } from "../interfaces";
 import { getToken } from "../services/Authentication/auth.api";
+import styles from "../styles/AdminPage.module.css"
 
 type Props = {
   filename?: string;
@@ -54,5 +55,5 @@ export default function ExportToCSV({ filename = "produkter.csv" }: Props) {
     }
   }
 
-  return <button onClick={exportToCSV}>Exportera alla produkter till CSV</button>;
+  return <button onClick={exportToCSV} className={styles.exportToSVGBtn}>Exportera alla produkter till CSV</button>;
 }
