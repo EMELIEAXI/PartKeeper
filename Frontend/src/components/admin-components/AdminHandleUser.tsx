@@ -12,20 +12,23 @@ export default function AdminHandleUser() {
   const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState<User | null>(null); 
   const [deleteUserTarget, setDeleteUserTarget] = useState<User | null>(null);
+  const [query, setQuery] = useState("");
+  const [roleFilter, setRoleFilter] = useState("");
   
     useEffect(() => {
     loadUsers();
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, roleFilter]); 
 
  async function loadUsers() {
-    try {
-      const data = await fetchAllUsers();
-      setUsers(data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+  try {
+    const data = await fetchAllUsers(query, roleFilter); // <-- SKICKAR FILTER
+    setUsers(data);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
   }
 
   if (loading) return <p>Laddar...</p>;
@@ -62,9 +65,27 @@ const reloadUsers = async () => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Användaradministration</h2>
+      {/* <h2 className={styles.title}>Användaradministration</h2> */}
 
       <div className={styles.userList}>
+        <input 
+        type="text"
+        placeholder="Sök efter användare..."
+        value={query}
+        onChange={e => {
+          setQuery(e.target.value);
+        }}
+        className={styles.inputbox}
+      />
+      <select
+  className={styles.inputbox}
+  value={roleFilter}
+  onChange={(e) => setRoleFilter(e.target.value)}
+>
+  <option value="">Alla roller</option>
+  <option value="Admin">Admin</option>
+  <option value="User">User</option>
+</select>
         {users.map((user) => (
           <div key={user.id} className={styles.userCard}>
             <div className={styles.userInfo}>

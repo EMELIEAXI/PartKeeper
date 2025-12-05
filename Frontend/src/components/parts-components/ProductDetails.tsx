@@ -93,7 +93,7 @@ export default function ProductDetails() {
         <div className={styles.actionButtons}>
           <button className={styles.addBtn} onClick={() => navigate(-1)}>&larr; Tillbaka</button>
           { isAdmin && (
-            <button className={styles.addBtn} onClick={() => setShowEditModal(true)}>redigera</button>
+            <button className={styles.addBtn} onClick={() => setShowEditModal(true)}>Redigera</button>
           )}
          </div>
 

@@ -6,8 +6,8 @@ export default function AdminLayout() {
 
   return (
     <div className={styles.adminContainer}>
-      <h1>Admin</h1>
-      <button className={styles.backBtn} onClick={() => navigate(-1)}>tillbaka</button>
+      <h2>Användaradministration</h2>
+      <button className={styles.backBtn} onClick={() => navigate(-1)}>&larr; Tillbaka</button>
 
       {/* Här renderas undersidorna */}
       <Outlet />
