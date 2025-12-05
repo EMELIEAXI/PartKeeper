@@ -112,20 +112,25 @@ export async function updateUser(id: string, data: UpdateUserDto): Promise<void>
   }
 }
 
-export async function fetchAllUsers() {
-  const token = localStorage.getItem("token");
+export async function fetchAllUsers(search?: string, role?: string) {
+  const params = new URLSearchParams();
 
-  const res = await fetch("https://localhost:7089/api/Auth", {
+  if (search) params.append("search", search);
+  if (role) params.append("role", role);
+
+  const token = localStorage.getItem("token"); // <-- HÄMTA TOKEN
+
+ const res = await fetch(`https://localhost:7089/api/Auth?${params.toString()}`, {
+  method: "GET",
     headers: {
-      "Authorization": `Bearer ${token}`
+      "Authorization": `Bearer ${token}`,   // <-- SKICKA TOKEN
+      "Content-Type": "application/json"
     }
   });
 
-  if (!res.ok) {
-    throw new Error("Kunde inte hämta användare");
-  }
+  if (!res.ok) throw new Error("Failed to load users");
 
-  return await res.json();
+  return res.json();
 }
 
 export async function deleteUser(userId: string): Promise<void> {

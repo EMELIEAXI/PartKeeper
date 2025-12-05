@@ -156,6 +156,7 @@ export default function AdminCreateProduct() {
           name="distributorSelect" 
           id="distributorSelect"
           value={formData.categoryId}
+          required
           onChange={e => setFormData(prev => ({
             ...prev,
             categoryId: Number(e.target.value)
@@ -165,7 +166,7 @@ export default function AdminCreateProduct() {
 
             {category?.map(cat => (
               <option key={cat.categoryId} value={cat.categoryId}>
-                {cat.categoryName}
+                {cat.categoryName} 
               </option>
             ))}
           </select>

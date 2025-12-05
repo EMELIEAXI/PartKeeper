@@ -1,11 +1,9 @@
 .adminContainer {
   padding: 2rem 1rem;
-  background-color: var(--golden-apricot);
-  border-radius: 1rem;
+  background-color: var(--background-white);
   width: 100%;
-  max-width: 400px;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  min-height: 100vh;
+  max-width: 500px;
 }
 
 .adminContainer h1 {
@@ -14,17 +12,33 @@
 
 .backBtn {
   margin: 1rem;
-  width: 70px;
+  width: 100px;
+  color: white;
+}
+
+.adminMenu h3 {
+  margin-left: 10px;
 }
 
 .adminMenu li {
   list-style: none;
   padding: 1rem 2rem;
-  background-color: rgb(255, 252, 252);
+  background-color: #f7f7f7;
   margin: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
 
 .adminMenu a {
-  color: var(--link-color);
+  color: var(--text-color);
   text-decoration: none;
+}
+
+@media (min-width: 500px) {
+  .adminContainer {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+    min-height: auto;
+  }
 }

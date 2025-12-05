@@ -68,14 +68,12 @@
 :root {
   --ocean-blue: #1E88E5;
   --golden-apricot: rgba(228, 154, 58, 1);
-  --orange: rgb(255, 165, 0);
   --lavender-grey: rgba(128, 138, 157, 1);
   --primary: #0851AA;
   --secondary: #0b112b;
   --link: #f1f1f1;
   --details-color: rgb(220, 146, 9);
-  --button-color: #fff;
-  --second-button-color: #2563eb;
+  --button-color: #0077ff;
   --link-color: rgb(19, 19, 206);
   --text-color: #fff;
   --headerFont: 'Lexend', Arial;
@@ -115,7 +113,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Knapp default */
 button {
   padding: 0.55rem 1rem;
-  background-color: white;
+  background-color: var(--button-color);
   border: none;
   border-radius: 1rem;
   cursor: pointer;
@@ -124,6 +122,13 @@ button {
 
 button:hover {
   transform: scale(1.05);
+}
+
+input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 6px;
 }
 
 fieldset {

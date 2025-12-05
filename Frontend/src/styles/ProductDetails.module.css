@@ -8,13 +8,6 @@
   margin-bottom: 5rem;
 }
 
-.updateBtn {
-  border: 1px solid rgb(185, 183, 183);
-  margin: 1rem;
-  width: 5rem;
-  margin-left: auto;
-}
-
 .addBtn {
   padding: 0.6rem 1rem;
   border-radius: 6px;
@@ -23,6 +16,7 @@
   cursor: pointer;
   transition: background-color 0.15s ease;
   width: max-content;
+  color: var(--text-color)
 }
 .actionButtons {
   display: flex;
