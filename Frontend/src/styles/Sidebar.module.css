@@ -15,7 +15,7 @@
   right: 0;
   height: 100vh;
   width: 260px;
-  background-color: var(--golden-apricot);
+  background-color: #073f84;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.25);
 
   display: flex;
@@ -40,7 +40,7 @@
 
 .sidebar a {
   text-decoration: none;
-  color: var(--link-color);
+  color: var(--link);
   padding: 0.8rem;
   border-bottom: 1px solid #e0e0e0;
 
@@ -48,7 +48,7 @@
 }
 
 .sidebar a:hover {
-  background-color: var(--details-color)
+  opacity: 0.5;
 }
 
 .logout-btn {

@@ -9,6 +9,12 @@ export default function LowStockList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [page, setPage] = useState(1);
+  const pageSize = 8;
+
+  const totalPages = Math.ceil(products.length / pageSize);
+  const currentPageItems = products.slice((page - 1) * pageSize, page * pageSize);
+
   useEffect(() => {
     const load = async () => {
       setLoading(true);
@@ -18,11 +24,7 @@ export default function LowStockList() {
         const data = await getLowstock();
         setProducts(data);
       } catch (err: unknown) {
-        console.error("Kunde inte hämta produkter med låg lager", err);
-
-        const message =
-          err instanceof Error ? err.message : "Fel vid hämtning";
-
+        const message = err instanceof Error ? err.message : "Fel vid hämtning";
         setError(message);
         setProducts([]);
       } finally {
@@ -40,11 +42,10 @@ export default function LowStockList() {
 
   return (
     <section className={styles["dashboard-section"]}>
-      <h3>Varning</h3>
-      <h4>Produkter med kritiskt lågt lagersaldo</h4>
+      <h3>Lågt lagersaldo</h3>
 
       <ul className={styles.list}>
-        {products.map((p) => (
+        {currentPageItems.map((p) => (
           <li key={p.id}>
             <Link to={`/parts/${p.id}`}>
               {p.productName}
@@ -53,6 +54,24 @@ export default function LowStockList() {
           </li>
         ))}
       </ul>
+
+      <div className={styles.pagination}>
+        <button 
+          onClick={() => setPage((prev) => prev - 1)}
+          disabled={page === 1}
+        >
+          Föregående
+        </button>
+
+        <span>Sida {page} / {totalPages}</span>
+
+        <button 
+          onClick={() => setPage((prev) => prev + 1)}
+          disabled={page === totalPages}
+        >
+          Nästa
+        </button>
+      </div>
     </section>
   );
 }

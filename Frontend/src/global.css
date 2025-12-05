@@ -1,3 +1,60 @@
+@font-face {
+  font-display: swap;
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../src/assets/fonts/lexend-v26-latin-regular.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 500;
+  src: url('../src/assets/fonts/lexend-v26-latin-500.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../src/assets/fonts/lexend-v26-latin-600.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../src/assets/fonts/lexend-v26-latin-700.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../src/assets/fonts/poppins-v24-latin-regular.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  src: url('../src/assets/fonts/poppins-v24-latin-500.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../src/assets/fonts/poppins-v24-latin-600.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../src/assets/fonts/poppins-v24-latin-700.woff2') format('woff2');
+}
+
 /* Normalize */
 *,
 *::before,
@@ -13,13 +70,16 @@
   --golden-apricot: rgba(228, 154, 58, 1);
   --orange: rgb(255, 165, 0);
   --lavender-grey: rgba(128, 138, 157, 1);
-
+  --primary: #0851AA;
+  --secondary: #0b112b;
+  --link: #f1f1f1;
   --details-color: rgb(220, 146, 9);
   --button-color: #fff;
   --second-button-color: #2563eb;
   --link-color: rgb(19, 19, 206);
   --text-color: #fff;
-  --font-family: Arial, Helvetica, sans-serif;
+  --headerFont: 'Lexend', Arial;
+  --bodyTextFont: 'Poppins';
   --default-padding: 1rem;
 }
 
@@ -28,18 +88,22 @@
 html, body {
   height: 100%;
   margin-bottom: 4.5rem; /* Inget döljs av navmenyn */
-  background-color: var(--lavender-grey);
-  font-family: var(--font-family);
+  background-color: var(--secondary);
+  font-family: var(--bodyTextFont);
   color: var(--text-color);
+}
+
+h1 {
+  font-family: var(--headerFont);
 }
 
 #root {
   min-height: 100%;
   padding-bottom: 4.5rem;
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 }
 
 /* Rubriker */

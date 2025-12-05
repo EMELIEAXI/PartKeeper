@@ -1,79 +1,169 @@
-/* Wrapper i samma stil som dashboarden */
-.dashboard-wrapper {
+.pageWrapper {
   width: 100%;
-  margin: 1rem auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.logoContainer {
+  width: auto;
+  max-width: 160px;
+  margin: 1rem 0;
+}
+
+.logoImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 3rem auto;
   padding: 1rem;
-  background-color: #fefefe;
-
+  background-color: #e8e8e8;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  font-family: Arial, sans-serif;
   color: #333;
-  text-align: center;
-   padding: 1.5rem;
-    min-height: 100vh;
-    border-radius: 0;
-    margin: 0;
-}
-
-/* Sektion liknande dashboard-section */
-.dashboardSection {
-  background: #ffffff;
   border-radius: 12px;
-  border: 1px solid #e8e8e8;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-  padding: 1.5rem;
-  margin-top: 1.5rem;
+  text-align: center;
+  box-sizing: border-box;
 }
 
-/* Sökfält */
-.inputbox {
-  width: 100%;
-  max-width: 400px;
-  padding: 0.7rem 1rem;
-  border-radius: 8px;
+.titleRow {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.titleCenter {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.titleCenter h1 {
+  margin: 0;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 2rem;
+}
+
+.addBtn {
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  margin-bottom: 1.2rem;
-  font-size: 1rem;
-}
-
-/* Tabell */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  font-size: 0.95rem;
-  text-align: left;
-}
-
-.table th {
+  background: #f7f7f7;
   cursor: pointer;
-  padding: 0.8rem;
-  background: #f3f3f3;
-  border-bottom: 2px solid #ddd;
-  font-weight: 600;
-  user-select: none;
+  font-size: 1.4rem;
+  font-weight: 700;
+  transition: background-color 0.15s ease;
 }
 
-.table td {
-  padding: 0.8rem;
-  border-bottom: 1px solid #eee;
-}
-
-.table tr:hover {
+.addBtn:hover {
   background-color: #e1e7ff;
 }
 
-/* Pagination */
+.filterBox {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  box-shadow:
+      0 2px 4px rgba(0,0,0,0.04),
+      0 8px 20px rgba(0,0,0,0.08);
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.filterBox > div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+input[type="text"],
+.mobileSelect {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 100%;
+  background: #fff;
+  color: #333;
+}
+
+.tableContainer {
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  overflow-x: auto;
+  background: white;
+  box-shadow:
+      0 2px 4px rgba(0,0,0,0.04),
+      0 8px 20px rgba(0,0,0,0.08);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 0.8rem;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.table th {
+  background: #f3f3f3;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.table tr {
+  cursor: pointer;
+}
+
+.table tr:nth-child(even) {
+  background: #fafafa;
+}
+
+.table tr:hover {
+  background: #e1e7ff;
+}
+
+.desktopOnly { display: none; }
+.mobileOnly { display: table-cell; }
+
+.mobileSelect {
+  padding: 0.4rem;
+  border-radius: 6px;
+}
+
 .pagination {
-  margin-top: 1.5rem;
+  margin: 1.5rem 0;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
 }
 
-.pagination button, .addBtn {
-  padding: 0.6rem 1rem;
+.pagination button {
+  padding: 0.6rem 0.8rem;
   border-radius: 6px;
   border: 1px solid #ccc;
   background: #f7f7f7;
@@ -90,71 +180,7 @@
   cursor: not-allowed;
 }
 
-.btn-title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-/* Responsiv anpassning */
-@media (min-width: 48rem) {
-  .dashboard-wrapper {
-  max-width: 100%;
-  border-radius: 12px;
-  min-height: auto;
-  }
-}
-
-@media (min-width: 64rem) {
-  .dashboard-wrapper {
-    max-width: 1100px;
-    padding: 2rem 2rem 3rem 2rem;
-  }
-}
-
-@media (min-width: 75rem) {
-
-  .dashboardSection {
-    padding: 20px;
-  }
-}
-
-/* Dölj element på desktop */
-.desktopOnly {
-  display: none;
-}
-
-/* Visa element endast på mobil */
-.mobileOnly {
-  display: table-cell;
-}
-
-/* Select i mittenkolumnen */
-.mobileSelect {
-  width: 100%;
-  padding: 0.4rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 0.9rem;
-}
-
-/* Rader ska vara klickbara */
-.rowClickable {
-  cursor: pointer;
-}
-
-.rowClickable:hover {
-  background-color: #e1e7ff;
-}
-
-/* === Desktop-läge === */
 @media (min-width: 768px) {
-  .desktopOnly {
-    display: table-cell;
-  }
-
-  .mobileOnly {
-    display: none;
-  }
+  .desktopOnly { display: table-cell; }
+  .mobileOnly { display: none; }
 }

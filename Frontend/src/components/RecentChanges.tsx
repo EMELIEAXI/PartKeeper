@@ -9,6 +9,12 @@ export default function RecentChanges() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [page, setPage] = useState(1);
+  const pageSize = 8;
+
+  const totalPages = Math.ceil(changes.length / pageSize);
+  const currentPageItems = changes.slice((page - 1) * pageSize, page * pageSize);
+
   useEffect(() => {
     const load = async () => {
       try {
@@ -22,18 +28,15 @@ export default function RecentChanges() {
 
         const all: Transaction[] = await res.json();
 
-        const recent = all
-          .sort(
-            (a, b) =>
-              new Date(b.timeStamp).getTime() -
-              new Date(a.timeStamp).getTime()
-          )
-          .slice(0, 5);
+        const sorted = all.sort(
+          (a, b) =>
+            new Date(b.timeStamp).getTime() -
+            new Date(a.timeStamp).getTime()
+        );
 
-        setChanges(recent);
+        setChanges(sorted);
       } catch (err: unknown) {
-        const message =
-          err instanceof Error ? err.message : "Fel vid hämtning";
+        const message = err instanceof Error ? err.message : "Fel vid hämtning";
         setError(message);
       } finally {
         setLoading(false);
@@ -49,14 +52,13 @@ export default function RecentChanges() {
 
   return (
     <section className={styles["dashboard-section"]}>
-      <h4>Senaste ändringar</h4>
+      <h3>Senaste ändringar</h3>
 
       <ul className={styles.list}>
-        {changes.map((t) => (
+        {currentPageItems.map((t) => (
           <li key={t.transactionId}>
             <Link to={`/parts/${t.productId}`}>
               <span>{t.productName}</span>
-
               <span>{new Date(t.timeStamp).toLocaleDateString()}</span>
 
               <span
@@ -74,7 +76,24 @@ export default function RecentChanges() {
           </li>
         ))}
       </ul>
+
+      <div className={styles.pagination}>
+        <button 
+          onClick={() => setPage((prev) => prev - 1)}
+          disabled={page === 1}
+        >
+          Föregående
+        </button>
+
+        <span>Sida {page} / {totalPages}</span>
+
+        <button 
+          onClick={() => setPage((prev) => prev + 1)}
+          disabled={page === totalPages}
+        >
+          Nästa
+        </button>
+      </div>
     </section>
   );
 }
-
