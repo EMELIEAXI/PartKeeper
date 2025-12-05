@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -181,17 +182,53 @@ public class AuthController : ControllerBase
     }
     [Authorize(Roles = "Admin")]
     [HttpGet]
-    public async Task<IActionResult> GetAllUsers()
+    public async Task<IActionResult> GetAllUsers(string? search, string? role)
     {
-        var users = _userManager.Users.ToList();
-        var list = new List<UserDto>();
-        foreach (var user in users)
+        var query = _userManager.Users.AsQueryable();
+
+        // --------- Fritextsökning ----------
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            search = search.ToLower();
+
+            query = query.Where(u =>
+                (u.Email != null && u.Email.ToLower().Contains(search)) ||
+                (u.UserName != null && u.UserName.ToLower().Contains(search)) ||
+                (u.FirstName != null && u.FirstName.ToLower().Contains(search)) ||
+                (u.LastName != null && u.LastName.ToLower().Contains(search)) ||
+                (u.PhoneNumber != null && u.PhoneNumber.ToLower().Contains(search))
+            );
+        }
+
+        var allUsers = await query.ToListAsync();
+
+        var filteredUsers = new List<ApplicationUser>();
+
+        // --------- Filtrera på roll ----------
+        if (!string.IsNullOrWhiteSpace(role))
+        {
+            foreach (var user in allUsers)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Any(r => string.Equals(r, role, StringComparison.OrdinalIgnoreCase)))
+                {
+                    filteredUsers.Add(user);
+                }
+            }
+        }
+        else
+        {
+            filteredUsers = allUsers;
+        }
+
+        // --------- Bygg DTO-listan ----------
+        var userList = new List<UserDto>();
+
+        foreach (var user in filteredUsers)
         {
             var roles = await _userManager.GetRolesAsync(user);
 
-            var role = roles.FirstOrDefault();
-
-            list.Add(new UserDto
+            userList.Add(new UserDto
             {
                 Id = user.Id,
                 Email = user.Email ?? "",
@@ -199,11 +236,11 @@ public class AuthController : ControllerBase
                 FirstName = user.FirstName ?? "",
                 LastName = user.LastName ?? "",
                 PhoneNumber = user.PhoneNumber ?? "",
-                Role = role ?? "User"
+                Role = roles.FirstOrDefault() ?? "User"
             });
         }
 
-        return Ok(list);
+        return Ok(userList);
     }
 
     [HttpDelete("{id}")]
