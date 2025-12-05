@@ -91,7 +91,7 @@ export default function AdminCreateCategory() {
 
   // Radera en kategori
   async function removeCategory(id: number) {
-    if (!confirm("Är du säker på att du vill radera denna kategori?")) return;
+    if (!confirm("Är du säker på att du vill radera denna kategori? Gör du det kommer alla produkter som tillhör denna kategori också att raderas.")) return;
 
     try {
       await deleteCategory(id);

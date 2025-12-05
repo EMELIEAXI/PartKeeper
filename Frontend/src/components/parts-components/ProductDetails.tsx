@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import type { Category, Product } from "../../interfaces";
 import styles from "../../styles/ProductDetails.module.css";
+import "../../global.css";
+// import { Plus, Minus } from "lucide-react";
 import { getProductDetails } from "../../services/Parts/parts.api";
 import { createTransaction } from "../../services/TransactionsApi";
 import type { CreateTransactionPayload } from "../../services/TransactionsApi";
@@ -24,6 +26,7 @@ export default function ProductDetails() {
   const [success, setSuccess] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [actionType, setActionType] = useState<"Remove" | "Add">("Remove");
 
   const navigate = useNavigate();
 
@@ -54,37 +57,40 @@ export default function ProductDetails() {
   if (!product) return <p>Produkten hittades inte!</p>;
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-    setSuccess("");
+  e.preventDefault();
+  setError("");
+  setSuccess("");
 
-    const payload: CreateTransactionPayload = {
-      productId: product!.id,
-      quantityChange: -Math.abs(quantity),
-      transactionType: "Remove",
-      comment,
-    };
+  const quantityChange = actionType === "Remove" ? -Math.abs(quantity) : Math.abs(quantity);
 
-    try {
-      await createTransaction(payload);
+  const payload: CreateTransactionPayload = {
+    productId: product!.id,
+    quantityChange,
+    transactionType: actionType === "Remove" ? "Remove" : "Add",
+    comment,
+  };
 
-      setSuccess("Uttag bekräftat.");
+  try {
+    await createTransaction(payload);
 
-      setLocalQuantity((prev) => (prev !== null ? prev - quantity : quantity));
+    setSuccess(actionType === "Remove" ? "Uttag bekräftat." : "Inlagring bekräftad.");
 
-      setQuantity(1);
-      setComment("");
+    setLocalQuantity((prev) =>
+      prev !== null ? prev + quantityChange : quantityChange
+    );
 
-      setShowForm(false);
+    setQuantity(1);
+    setComment("");
+    setShowForm(false);
 
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Ett okänt fel inträffade");
-      }
+  } catch (err) {
+    if (err instanceof Error) {
+      setError(err.message);
+    } else {
+      setError("Ett okänt fel inträffade");
     }
   }
+}
 
   return (
     <div>
@@ -93,7 +99,7 @@ export default function ProductDetails() {
         <div className={styles.actionButtons}>
           <button className={styles.addBtn} onClick={() => navigate(-1)}>&larr; Tillbaka</button>
           { isAdmin && (
-            <button className={styles.addBtn} onClick={() => setShowEditModal(true)}>redigera</button>
+            <button className={styles.addBtn} onClick={() => setShowEditModal(true)}>Redigera</button>
           )}
          </div>
 
@@ -105,18 +111,33 @@ export default function ProductDetails() {
         
         </div>
 
-        <div className={styles.plusMinusBtn}>
-          <button
-            className={styles.centerActionBtn}
-            onClick={() => {
-              setShowForm(true);
-              setError("");
-              setSuccess("");
-            }}
-          >
-            Hämta
-          </button>
-        </div>
+  <div className={styles.plusMinusBtn}>
+  <button
+    className={styles.centerActionBtn}
+    onClick={() => {
+      setActionType("Remove");
+      setShowForm(true);
+      setError("");
+      setSuccess("");
+    }}
+  >
+    Hämta
+  </button>
+  
+  {isAdmin && (
+    <button
+      className={styles.centerActionBtn}
+      onClick={() => {
+        setActionType("Add");
+        setShowForm(true);
+        setError("");
+        setSuccess("");
+      }}
+    >
+      Lagra in
+    </button>
+  )}
+</div>
 
         {success && (
           <p className={styles.successMessage}>{success}</p>
@@ -131,7 +152,7 @@ export default function ProductDetails() {
               className={styles.modal}
               onClick={(e) => e.stopPropagation()}
             >
-              <h3>Hämta reservdel</h3>
+             <h3>{actionType === "Remove" ? "Hämta reservdel" : "Lagra in reservdel"}</h3>
 
               {error && <p className={styles.error}>{error}</p>}
 
@@ -154,9 +175,9 @@ export default function ProductDetails() {
                   className={styles.input}
                 />
 
-                <button type="submit" className={styles.confirmBtn}>
-                  Bekräfta uttag
-                </button>
+<button type="submit" className={styles.confirmBtn}>
+  {actionType === "Remove" ? "Bekräfta uttag" : "Bekräfta inlagring"}
+</button>
               </form>
 
               <button

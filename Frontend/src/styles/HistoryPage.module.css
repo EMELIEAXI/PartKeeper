@@ -1,200 +1,260 @@
-.wrapper {
-    width: 100%;
-    /* margin: 1rem auto; */
-    padding: 1rem;
-    background: #ffffff;
-    /* border-radius: 12px; */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    font-family: Arial, sans-serif;
-    color: #333;
+.pageWrapper {
+  width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 1.5rem;
+.logoContainer {
+  width: auto;
+  max-width: 160px;
+  margin: 1rem 0;
+}
+
+.logoImage {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 3rem auto;
+  padding: 1rem;
+  background-color: #e8e8e8;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  color: #333;
+  border-radius: 12px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .filterBox {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-    background: #f7f7f7;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.04),
+    0 8px 20px rgba(0,0,0,0.08);
+  margin-bottom: 1rem;
+  align-items: center;
 }
 
 .filterBox > div {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.filterBox button {
+  max-width: 200px;
 }
 
 label {
-    font-weight: 600;
-    margin-bottom: 0.3rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
 }
 
 select, input[type="date"] {
-    padding: 0.5rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    width: 100%;
-    background: #fff;
-    color: #333;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 100%;
+  background: #fff;
+  color: #333;
 }
 
 .filterBtn {
-    padding: 0.7rem;
-    width: 100%;
-    background: #0077ff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
+  padding: 0.7rem;
+  width: 100%;
+  background: #0077ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .filterBtn:hover {
-    background: #005bcc;
+  background: #005bcc;
 }
 
 .tableContainer {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow-x: auto;
-    background: white;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  overflow-x: auto;
+  background: white;
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.04),
+    0 8px 20px rgba(0,0,0,0.08);
 }
 
 .table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .table th,
 .table td {
-    padding: 0.8rem;
-    border-bottom: 1px solid #eee;
+  padding: 0.8rem;
+  border-bottom: 1px solid #eee;
 }
 
 .table th {
-    background: #f3f3f3;
-    font-weight: 600;
-    text-align: center;
+  background: #f3f3f3;
+  font-weight: 600;
+  text-align: center;
 }
 
 .table td {
-    text-align: center;
+  text-align: center;
 }
 
 .table tr:nth-child(even) {
-    background: #fafafa;
+  background: #fafafa;
 }
 
 .table tr:hover {
-    background: #e1e7ff;
+  background: #e1e7ff;
 }
 
 .infoSelect {
-    width: 100%;
-    padding: 0.4rem;
-    border-radius: 6px;
-    border: 1px solid #bbb;
-    background: white;
+  width: 100%;
+  padding: 0.4rem;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  background: white;
 }
 
 .inleverans {
-    color: #0a8a00;
-    font-weight: 600;
+  color: #0a8a00;
+  font-weight: 600;
 }
 
 .uttag {
-    color: #c00000;
-    font-weight: 600;
+  color: #c00000;
+  font-weight: 600;
 }
 
+.pagination {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
 
+.pagination button {
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f7f7f7;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
 
-/* --- TABLET (768px – 1024px) --- */
-@media (min-width: 47.99rem) and (max-width: 64.99rem) {
+.pagination button:hover:not(:disabled) {
+  background-color: #e1e7ff;
+}
 
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Tablet */
+@media (min-width: 48rem) and (max-width: 64.99rem) {
+    .wrapper { 
+        padding-left: 1rem; 
+        padding-right: 1rem; 
+    }
     .filterBox {
-        display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         gap: 1rem;
+        align-items: center;
         justify-content: center;
     }
-
     .filterBox > div {
-        width: auto;
-        flex: 1 1 auto;
-        min-width: 230px;
+        flex: 1 1 250px;
+        min-width: 0;
     }
-
-    .filterBox > div:nth-child(1) {
-      order: 3;
-    }
-
-    .filterBox > div:nth-child(2) {
-      order: 2;
-    }
-
     .filterBox button {
-      order: 4;
-    }
-
-    select,
-    input[type="date"] {
         width: 100%;
-        height: 45px;
+        max-width: 300px;
     }
-
-    .filterBtn {
-        width: 200px;
-        height: 45px;
-        margin-top: 0.5rem;
-        align-self: flex-end; 
-    }
-
-    .infoSelect {
-        display: none;
+    select, input[type="date"] { 
+        width: 100%; 
+        height: 45px; 
     }
 }
 
-/* --- DESKTOP (1024px) --- */
+@media (min-width: 64rem) and (max-width: 64.99rem) {
+    .filterBox > div { 
+        flex: 1 1 400px; 
+    }
+}
+
+/* Mobil */
+@media (max-width: 47.99rem) {
+    .wrapper { 
+        padding-left: 1rem; 
+        padding-right: 1rem; 
+    }
+    h1 { 
+        font-size: 1.8rem; 
+    }
+    .filterBox { 
+        flex-direction: column; 
+        gap: 0.8rem; 
+    }
+    .filterBox > div { 
+        width: 100%; 
+        min-width: 0; 
+    }
+    .filterBtn { 
+        width: 100%; 
+    }
+}
+
+/* Desktop */
 @media (min-width: 65rem) {
-    .wrapper {
-        max-width: 1100px;
-         margin: 1rem auto;
-    border-radius: 12px;
+    .wrapper { 
+        max-width: 1100px; 
+        margin: 0 auto 3rem auto; 
     }
-
-    .filterBox {
-        flex-direction: row;
-        align-items: end;
-        justify-content: space-between;
-        gap: 1rem;
+    .filterBox { 
+        flex-direction: row; 
+        align-items: end; 
+        justify-content: space-between; 
+        gap: 1rem; 
     }
-
-    .filterBox > div {
-        flex-direction: column;
-        width: auto;
+    .filterBox > div { 
+        flex-direction: column; 
+        width: auto; 
     }
-
-    select,
-    input[type="date"],
-    .filterBtn {
-        width: auto;
-        min-width: 150px;
-        height: 45px;
+    select, input[type="date"], .filterBtn { 
+        width: auto; 
+        min-width: 150px; 
+        height: 45px; 
     }
-
-    .filterBtn {
-        padding: 0 1.5rem;
-        height: 45px;
+    .filterBtn { 
+        padding: 0 1.5rem; 
+        height: 45px; 
     }
-
-    .infoSelect {
-        display: none;
+    .infoSelect { 
+        display: none; 
     }
 }

@@ -8,7 +8,7 @@
   width: 100%;
   height: 4.5rem;
   z-index: 1000;
-  background-color: var(--golden-apricot);
+  background-color: var(--primary);
 }
 
 .nav-link {
@@ -20,10 +20,10 @@
 }
 
 .nav-wrapper a {
-  color: var(--link-color);
+  color: var(--link);
 }
 
 .nav-wrapper button {
   background: none;
-  color: var(--link-color);
+  color: var(--link);
 }

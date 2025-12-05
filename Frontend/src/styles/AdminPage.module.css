@@ -12,9 +12,8 @@
 
 .backBtn {
   margin: 1rem;
-  width: 70px;
-  background-color: white;
-  border: 1px solid #ccc;
+  width: 100px;
+  color: white;
 }
 
 .adminMenu h3 {

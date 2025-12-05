@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
-import styles from "../../styles/ProductSearch.module.css"
-import type { Product } from "../../interfaces"
+import styles from "../../styles/ProductSearch.module.css";
+import "../../global.css";
+import type { Product } from "../../interfaces";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+
+import logo from "../../assets/logo.png";
 
 export default function ProductSearch() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -15,9 +18,9 @@ export default function ProductSearch() {
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  
+
   const navigate = useNavigate();
-  const pageSize = 10; // 20 per sida
+  const pageSize = 20;
 
   const fetchProducts = async () => {
     const url = new URL("https://localhost:7089/api/Parts");
@@ -36,7 +39,6 @@ export default function ProductSearch() {
     });
 
     const data = await res.json();
-
     setProducts(data.items);
     setTotalPages(data.totalPages);
   };
@@ -52,102 +54,113 @@ export default function ProductSearch() {
 
   useEffect(() => {
     fetchProducts();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, sortBy, sortOrder, page]);
 
+  return (
+    <div className={styles.pageWrapper}>
+      
+      <div className={styles.logoContainer}>
+        <img src={logo} alt="PartKeeper logotyp" className={styles.logoImage} />
+      </div>
 
- return (
-  <div className={styles["dashboard-wrapper"]}>
-    <div className={styles["btn-title-row"]}>
-      <h2>Alla Produkter</h2>
-      {user?.role === "Admin" && (
-      <button className={styles.addBtn} onClick={() => navigate("/admin/create-product")}>+</button>
-      )}
-    </div>
-    <div className={styles.dashboardSection}>
-      <input 
-        type="text"
-        placeholder="Sök efter namn eller artikelnummer..."
-        value={query}
-        onChange={e => {
-          setQuery(e.target.value);
-          setPage(1);
-        }}
-        className={styles.inputbox}
-      />
+      <div className={styles.wrapper}>
+        <div className={styles.titleRow}>
+          <div className={styles.titleCenter}>
+            <h1>Alla Produkter</h1>
+          </div>
 
-      <table className={styles.table}>
-  <thead>
-    <tr>
-      <th onClick={() => handleSort("productName")}>Namn</th>
+          {user?.role === "Admin" && (
+          <button className={styles.addBtn} onClick={() => navigate("/admin/create-product")}>+</button>
+          )}
+        </div>
 
-      {/* Mobil: visa SELECT istället för två kolumner */}
-      <th className={styles.mobileOnly}>
-        <select 
-          value={mobileColumn}
-          onChange={(e) => setMobileColumn(e.target.value)}
-          className={styles.mobileSelect}
-        >
-          <option value="articleNumber">Artikelnummer</option>
-          <option value="categoryName">Leverantör</option>
-        </select>
-      </th>
+        <div className={styles.filterBox}>
+          <div>
+            <label>Sök produkt:</label>
+            <input
+              type="text"
+              placeholder="Sök efter namn eller artikelnummer..."
+              value={query}
+              onChange={e => {
+                setQuery(e.target.value);
+                setPage(1);
+              }}
+            />
+          </div>
+        </div>
 
-      {/* Desktop: visa båda kolumnerna */}
-      <th 
-        className={styles.desktopOnly}
-        onClick={() => handleSort("articleNumber")}
-      >
-        Artikelnummer
-      </th>
+        <div className={styles.tableContainer}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th onClick={() => handleSort("productName")}>Namn</th>
 
-      <th 
-        className={styles.desktopOnly}
-        onClick={() => handleSort("category")}
-      >
-        Leverantör
-      </th>
+                <th className={styles.mobileOnly}>
+                  <select 
+                    value={mobileColumn}
+                    onChange={(e) => setMobileColumn(e.target.value)}
+                    className={styles.mobileSelect}
+                  >
+                    <option value="articleNumber">Artikelnummer</option>
+                    <option value="categoryName">Leverantör</option>
+                  </select>
+                </th>
 
-      <th onClick={() => handleSort("quantity")}>Saldo</th>
-    </tr>
-  </thead>
+                <th 
+                  className={styles.desktopOnly}
+                  onClick={() => handleSort("articleNumber")}
+                >
+                  Artikelnummer
+                  </th>
 
-  <tbody>
-    {products.map(p => (
-      <tr 
-        key={p.id}
-        onClick={() => navigate(`/parts/${p.id}`)}
-        className={styles.rowClickable}
-      >
-        <td>{p.productName}</td>
+                <th 
+                  className={styles.desktopOnly}
+                  onClick={() => handleSort("category")}
+                >
+                  Leverantör
+                  </th>
 
-        {/* Mobil: visa endast den valda kolumnen */}
-        <td className={styles.mobileOnly}>
-          {mobileColumn === "articleNumber" && p.articleNumber}
-          {mobileColumn === "categoryName" && p.categoryName}
-        </td>
+                <th onClick={() => handleSort("quantity")}>Saldo</th>
+              </tr>
+            </thead>
 
-        {/* Desktop: visa båda */}
-        <td className={styles.desktopOnly}>{p.articleNumber}</td>
-        <td className={styles.desktopOnly}>{p.categoryName}</td>
+            <tbody>
+              {products.map(p => (
+                <tr 
+                  key={p.id}
+                  onClick={() => navigate(`/parts/${p.id}`)}
+                  className={styles.rowClickable}
+                >
+                  <td>{p.productName}</td>
 
-        <td>{p.quantity}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-      <div className={styles.pagination}>
-        <button disabled={page === 1} onClick={() => setPage(p => p - 1)}>
-          Föregående
-        </button>
+                  <td className={styles.mobileOnly}>
+                    {mobileColumn === "articleNumber" && p.articleNumber}
+                    {mobileColumn === "categoryName" && p.categoryName}
+                  </td>
 
-        <span>Sida {page} / {totalPages}</span>
+                  <td className={styles.desktopOnly}>{p.articleNumber}</td>
+                  <td className={styles.desktopOnly}>{p.categoryName}</td>
 
-        <button disabled={page === totalPages} onClick={() => setPage(p => p + 1)}>
-          Nästa
-        </button>
+                  <td>{p.quantity}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div className={styles.pagination}>
+            <button disabled={page === 1} onClick={() => setPage(p => p - 1)}>
+              Föregående
+            </button>
+
+            <span>Sida {page} / {totalPages}</span>
+
+            <button disabled={page === totalPages} onClick={() => setPage(p => p + 1)}>
+              Nästa
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
- );
+  );
 }
