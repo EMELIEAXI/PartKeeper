@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext"
 import styles from "../styles/LoginPage.module.css"
+import logo from "../assets/logo.png";
+import style from "../styles/Dashboard.module.css"
 
 
 export default function LoginPage() {
@@ -34,11 +36,15 @@ try {
 
 
   return (
-    <div>
-      <form onSubmit={handleLogin} className={styles ["form-wrapper"]}>
-        <h2>Logga in</h2>
+     <div className={style.pageWrapper}>
+      <div className={style.logoContainer}>
+        <img src={logo} alt="PartKeeper logotyp" className={style.logoImage} />
+      </div>
+      <form onSubmit={handleLogin} className={style.wrapper}>
+        
 
-        <fieldset>
+        
+          <h1>Logga in</h1>
           <div className={styles ["form-colum"]}>
             <label htmlFor="name">Användarnamn </label>
             <input id="name" 
@@ -66,7 +72,7 @@ try {
             <button type="submit">Logga in</button> 
           </div>
 
-        </fieldset>
+       
       </form>
     </div>
   );

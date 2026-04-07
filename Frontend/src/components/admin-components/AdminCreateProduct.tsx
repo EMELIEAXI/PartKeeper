@@ -82,6 +82,12 @@ export default function AdminCreateProduct() {
         <div className={styles.formColumn}>
           <label htmlFor="productName">Produktnamn: </label>
           <input 
+               onFocus={(e) =>
+            e.target.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          })
+        }
           type="text"
           id="productName"
           name="productName"

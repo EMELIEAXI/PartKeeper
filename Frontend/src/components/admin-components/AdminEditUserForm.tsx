@@ -56,6 +56,12 @@ export default function AdminEditUserForm({ user, onClose, onSaved }: Props) {
           <div className={styles.formColumn}>
             <label htmlFor="userName">Användarnamn:</label>
             <input
+                 onFocus={(e) =>
+            e.target.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          })
+        }
               type="text"
               id="userName"
               name="userName"

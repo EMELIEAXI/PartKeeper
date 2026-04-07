@@ -114,6 +114,12 @@ export default function AdminCreateCategory() {
           <div className={styles.formColumn}>
             <label htmlFor="categoryName">Leverantörsnamn: </label>
             <input 
+                 onFocus={(e) =>
+            e.target.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          })
+        }
             type="text"
             id="categoryName"
             name="categoryName"

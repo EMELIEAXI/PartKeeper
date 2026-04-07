@@ -69,6 +69,12 @@ const reloadUsers = async () => {
 
       <div className={styles.userList}>
         <input 
+            onFocus={(e) =>
+            e.target.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          })
+        }
         type="text"
         placeholder="Sök efter användare..."
         value={query}

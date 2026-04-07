@@ -113,6 +113,12 @@ const sortArrow = (key: keyof Product) => {
       <div className={styles.searchWrapper}>
         <h5>Sök produkt:</h5>
         <input 
+             onFocus={(e) =>
+            e.target.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          })
+        }
         type="text" 
         placeholder="Sök på namn eller artikelnr..."
         className={styles.searchInput} 

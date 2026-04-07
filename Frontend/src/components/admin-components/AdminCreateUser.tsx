@@ -74,6 +74,12 @@ export default function AdminCreateUser() {
           <div className={styles.formColumn}>
             <label htmlFor="email">Email: </label>
             <input 
+                 onFocus={(e) =>
+            e.target.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          })
+        }
             type="email"
             id="email"
             name="email"
