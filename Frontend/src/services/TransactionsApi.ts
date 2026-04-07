@@ -16,10 +16,13 @@ export interface Transaction {
     transactionDate: string;
 }
 
-const token = localStorage.getItem("token");
-console.log("TOKEN", token);
+function getToken(): string | null {
+  return localStorage.getItem("token");
+}
 
 export async function getTransactions(): Promise<Transaction[]> {
+    const token = getToken();
+
     const response = await fetch(API_BASE, {
         method: "GET",
         headers: {
@@ -37,6 +40,8 @@ export async function getTransactions(): Promise<Transaction[]> {
 export async function createTransaction(
     payload: CreateTransactionPayload
 ): Promise<Transaction> {
+
+    const token = getToken();
 
     const response = await fetch(API_BASE, {
         method: "POST",

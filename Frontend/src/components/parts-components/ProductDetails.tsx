@@ -161,7 +161,7 @@ export default function ProductDetails() {
                 <input
                   type="number"
                   min={1}
-                  max={localQuantity ?? product.quantity}
+                  max={actionType === "Remove" ? localQuantity ?? product.quantity : undefined}
                   value={quantity}
                   onChange={(e) => setQuantity(Number(e.target.value))}
                   className={styles.input}
