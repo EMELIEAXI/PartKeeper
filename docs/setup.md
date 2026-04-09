@@ -42,3 +42,35 @@ fetch("https://localhost:7089/api/parts");
 
 CORS måste tillåta:
 `http://localhost:5173`
+
+## 👤 Användartyper
+
+Applikationen innehåller två olika typer av användare med olika behörighetsnivåer:
+
+User (standardanvändare)
+En grundläggande användare med begränsad funktionalitet.
+Kan exempelvis:
+
+- Logga in 
+- Se lagersaldon
+- Söka fram produkter och se information
+- Plocka ut en produkt ur lager
+
+Seedat inlogg: user@test.se
+
+lösenord: User123!
+
+Admin (administratör)
+En användare med utökade rättigheter och full kontroll över systemet.
+Kan exempelvis:
+
+- Det en User kan +
+- Hantera och administrera produkter och lagersaldon
+- Utföra CRUD-operationer (Create, Read, Update, Delete)
+- Hantera andra användare och deras behörigheter
+
+Seedat inlogg: admin@test.se
+
+lösenord: Admin123!
+
+
